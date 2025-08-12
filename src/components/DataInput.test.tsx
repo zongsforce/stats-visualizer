@@ -3,6 +3,29 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DataInput } from './DataInput';
 
+// Mock react-i18next
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
+// Mock mobile hook
+jest.mock('../hooks/useMobileOptimized', () => ({
+  useMobileOptimized: () => ({
+    capabilities: {
+      isTouch: false,
+      isMobile: false,
+      hasVibration: false,
+    },
+    feedback: {
+      light: jest.fn(),
+      error: jest.fn(),
+    },
+    announce: jest.fn(),
+  }),
+}));
+
 describe('DataInput Component', () => {
   const mockOnDataChange = jest.fn();
   const mockOnError = jest.fn();

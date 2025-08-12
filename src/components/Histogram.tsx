@@ -101,39 +101,75 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
     };
   }, [data, bins, color, t]);
 
-  const meanValue = showMean ? calculateMean(data) : null;
+  const meanValue = useMemo(() => {
+    if (!showMean || data.length === 0) return null;
+    try {
+      return calculateMean(data);
+    } catch (error) {
+      console.warn('Failed to calculate mean:', error);
+      return null;
+    }
+  }, [showMean, data]);
 
   // Custom plugin to draw mean line  
   const meanLinePlugin = useMemo(() => ({
     id: 'meanLine',
     afterDraw: (chart: any) => {
-      if (!showMean || !meanValue || data.length === 0) return;
+      // Enhanced error checking
+      if (!showMean || !meanValue || data.length === 0 || !chart?.ctx || !chart?.chartArea) {
+        return;
+      }
       
       const ctx = chart.ctx;
       const chartArea = chart.chartArea;
       
-      // Get data range
-      const min = Math.min(...data);
-      const max = Math.max(...data);
+      // Ensure chartArea has valid dimensions
+      if (!chartArea.left || !chartArea.right || !chartArea.top || !chartArea.bottom) {
+        return;
+      }
       
-      // Calculate mean position as a fraction of the total data range
-      const meanPosition = (meanValue - min) / (max - min);
-      
-      // Map to pixel position within the chart area
-      const chartWidth = chartArea.right - chartArea.left;
-      const meanPixelX = chartArea.left + (meanPosition * chartWidth);
-      
-      // Draw the mean line with subtle styling
-      ctx.save();
-      ctx.strokeStyle = '#d32f2f'; // Deeper red, less glaring
-      ctx.lineWidth = 2; // Thinner line
-      ctx.setLineDash([6, 3]); // Shorter dashes
-      ctx.globalAlpha = 0.8; // Slight transparency
-      ctx.beginPath();
-      ctx.moveTo(meanPixelX, chartArea.top);
-      ctx.lineTo(meanPixelX, chartArea.bottom);
-      ctx.stroke();
-      ctx.restore();
+      try {
+        // Get data range
+        const min = Math.min(...data);
+        const max = Math.max(...data);
+        
+        // Skip if data range is invalid
+        if (min === max || !isFinite(min) || !isFinite(max) || !isFinite(meanValue)) {
+          return;
+        }
+        
+        // Calculate mean position as a fraction of the total data range
+        const meanPosition = (meanValue - min) / (max - min);
+        
+        // Skip if position is outside valid range
+        if (meanPosition < 0 || meanPosition > 1 || !isFinite(meanPosition)) {
+          return;
+        }
+        
+        // Map to pixel position within the chart area
+        const chartWidth = chartArea.right - chartArea.left;
+        const meanPixelX = chartArea.left + (meanPosition * chartWidth);
+        
+        // Skip if pixel position is invalid
+        if (!isFinite(meanPixelX) || meanPixelX < chartArea.left || meanPixelX > chartArea.right) {
+          return;
+        }
+        
+        // Draw the mean line with subtle styling
+        ctx.save();
+        ctx.strokeStyle = '#E85959'; // Use app's error color (warning red)
+        ctx.lineWidth = 2;
+        ctx.setLineDash([8, 4]); // More visible dash pattern
+        ctx.globalAlpha = 0.9; // Less transparency for better visibility
+        ctx.beginPath();
+        ctx.moveTo(meanPixelX, chartArea.top);
+        ctx.lineTo(meanPixelX, chartArea.bottom);
+        ctx.stroke();
+        ctx.restore();
+        
+      } catch (error) {
+        console.warn('Failed to draw mean line:', error);
+      }
     }
   }), [showMean, meanValue, data]);
 
@@ -178,7 +214,14 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
             const index = context[0].dataIndex;
             return t('histogram.range', { range: binRanges?.[index] || context[0].label });
           },
-          label: (context) => `${t('histogram.frequency')}: ${context.parsed.y}`
+          label: (context) => {
+            const baseLabel = `${t('histogram.frequency')}: ${context.parsed.y}`;
+            // Add mean line info to tooltip when hovering near mean
+            if (showMean && meanValue) {
+              return [baseLabel, t('histogram.mean', { value: meanValue.toFixed(2) })];
+            }
+            return baseLabel;
+          }
         }
       }
     },
@@ -249,10 +292,19 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
           />
         </Box>
 
-        {showMean && (
+        {showMean && meanValue && (
           <Box sx={{ mb: 2 }}>
-            <Typography variant="body2" color="textSecondary">
-              {t('histogram.mean', { value: calculateMean(data).toFixed(2) })}
+            <Typography variant="body2" color="textSecondary" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box 
+                sx={{ 
+                  width: 20, 
+                  height: 2, 
+                  backgroundColor: '#E85959',
+                  border: '1px dashed #E85959',
+                  opacity: 0.9 
+                }} 
+              />
+              {t('histogram.mean', { value: meanValue.toFixed(2) })}
             </Typography>
           </Box>
         )}
@@ -266,6 +318,7 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
         >
           {chartData && (
             <Bar 
+              key={`histogram-${data.length}-${bins}-${showMean ? meanValue : 'no-mean'}`}
               data-testid="histogram-chart"
               data={chartData} 
               options={chartOptions}

@@ -32,7 +32,8 @@ global.URL.revokeObjectURL = jest.fn();
 const mockAnchor = {
   click: jest.fn(),
   href: '',
-  download: ''
+  download: '',
+  style: {}
 };
 
 const mockCreateElement = jest.fn((tagName) => {

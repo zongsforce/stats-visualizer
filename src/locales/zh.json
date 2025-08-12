@@ -1,0 +1,127 @@
+{
+  "app": {
+    "title": "统计数据可视化工具",
+    "language": "语言",
+    "sections": {
+      "analysisResults": "数据分析结果",
+      "analysisResultsSubtitle": "通过统计测量和可视化探索您的数据",
+      "visualizations": "数据可视化"
+    }
+  },
+  "dataInput": {
+    "title": "数据输入",
+    "placeholder": "在此输入您的数值数据...",
+    "helperText": "支持逗号、空格或换行符分隔的数值",
+    "fileUpload": "文件上传",
+    "fileUploadDescription": "点击上传或拖拽文件到此处",
+    "fileUploadSupports": "支持 .txt、.csv、.json 文件",
+    "clear": "清除",
+    "valuesCount": "{{count}} 个数值",
+    "noDataAvailable": "无可用数据",
+    "processingData": "正在处理数据...",
+    "sampleData": "尝试示例数据",
+    "sampleDataButton": "使用示例",
+    "getStarted": "开始使用",
+    "getStartedDescription": "选择一个示例数据集来探索统计可视化工具：",
+    "samples": {
+      "normal": {
+        "name": "正态分布",
+        "description": "钟形曲线数据（考试成绩）"
+      },
+      "bimodal": {
+        "name": "双峰分布", 
+        "description": "双峰数据（身高数据）"
+      },
+      "skewed": {
+        "name": "偏态分布",
+        "description": "右偏数据（收入数据）"
+      },
+      "small": {
+        "name": "小数据集",
+        "description": "快速示例（10个数值）"
+      }
+    }
+  },
+  "statistics": {
+    "title": "描述性统计",
+    "mean": "均值",
+    "median": "中位数",
+    "standardDeviation": "标准差",
+    "coefficientOfVariation": "变异系数",
+    "minimum": "最小值",
+    "maximum": "最大值",
+    "count": "计数",
+    "range": "极差",
+    "quartiles": "四分位数",
+    "q1": "第一四分位数",
+    "q2": "第二四分位数",
+    "q3": "第三四分位数",
+    "q1Description": "25百分位数",
+    "q2Description": "50百分位数",
+    "q3Description": "75百分位数",
+    "iqr": "四分位距: {{value}}",
+    "copy": "复制",
+    "calculating": "正在计算统计数据...",
+    "outliersDetected": "数据集中检测到异常值",
+    "copySuccess": "统计数据已复制到剪贴板！",
+    "help": {
+      "mean": "平均值，通过将所有数字相加除以个数计算得出",
+      "median": "将数据按顺序排列后的中间值，比均值更不容易受异常值影响",
+      "standardDeviation": "衡量数据相对于均值的离散程度，数值越高表示变化越大",
+      "coefficientOfVariation": "相对变异度量（标准差÷均值×100%），用于比较不同数据集",
+      "minimum": "数据集中的最小值",
+      "maximum": "数据集中的最大值",
+      "count": "数据集中数据点的总数",
+      "range": "最大值与最小值之间的差",
+      "q1": "25%的数据低于此值，将数据下半部分分割",
+      "q2": "中位数，50%的数据低于此值",
+      "q3": "75%的数据低于此值，将数据上半部分分割",
+      "iqr": "四分位距（Q3-Q1），衡量中间50%数据的分布，不易受异常值影响"
+    }
+  },
+  "histogram": {
+    "title": "直方图",
+    "dataDistribution": "数据分布 (直方图)",
+    "numberOfBins": "分箱数量: {{count}}",
+    "frequency": "频次",
+    "value": "数值",
+    "range": "范围: {{range}}",
+    "mean": "均值: {{value}}",
+    "noDataAvailable": "直方图无可用数据",
+    "help": {
+      "histogram": "直方图通过将数值分组到不同区间（分箱）来显示数据的频次分布。每个柱子的高度代表落在该范围内的数据点数量。",
+      "bins": "分箱将数据范围分成相等的区间。更多分箱显示更细的详情但可能产生噪音；更少分箱显示总体模式但可能隐藏细节。"
+    }
+  },
+  "kde": {
+    "title": "核密度估计图",
+    "kernelDensityEstimation": "核密度估计",
+    "bandwidth": "带宽: {{value}}",
+    "kernel": "核函数",
+    "optimal": "最优值: {{value}}",
+    "probabilityDensity": "概率密度",
+    "density": "密度",
+    "densityValue": "密度: {{value}}",
+    "noDataAvailable": "核密度估计图无可用数据",
+    "insufficientData": "核密度计算至少需要2个数据点",
+    "kernels": {
+      "gaussian": "高斯核",
+      "epanechnikov": "Epanechnikov核",
+      "triangular": "三角核"
+    },
+    "help": {
+      "kde": "核密度估计创建一条平滑曲线显示数据的概率密度。与直方图不同，核密度估计提供数据分布的连续估计。",
+      "bandwidth": "带宽控制曲线的平滑度。较小的值显示更多细节但可能有噪音；较大的值创建更平滑的曲线但可能隐藏模式。",
+      "kernel": "核函数决定每个数据点周围曲线的形状。高斯核最常用，Epanechnikov核效率高，三角核具有有限支撑。"
+    }
+  },
+  "export": {
+    "statisticsSummary": "统计数据摘要"
+  },
+  "validation": {
+    "invalidNumericValues": "检测到无效的数值",
+    "unknownError": "发生未知错误",
+    "failedToReadFile": "读取文件失败",
+    "errorRecalculatingStatistics": "重新计算统计数据时发生错误"
+  }
+}

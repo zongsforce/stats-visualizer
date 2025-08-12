@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -40,6 +41,7 @@ interface HistogramProps {
 }
 
 export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMean = false }: HistogramProps) {
+  const { t } = useTranslation();
   const { chartData, binRanges, isEmpty } = useMemo(() => {
     if (data.length === 0) {
       return { chartData: null, binRanges: [], isEmpty: true };
@@ -80,7 +82,7 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
     });
 
     const datasets = [{
-      label: 'Frequency',
+      label: t('histogram.frequency'),
       data: binCounts,
       backgroundColor: color,
       borderColor: '#2c3e50',
@@ -98,7 +100,7 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
       binRanges,
       isEmpty: false
     };
-  }, [data, bins, color, showMean]);
+  }, [data, bins, color, t]);
 
   const meanValue = showMean ? calculateMean(data) : null;
 
@@ -157,7 +159,7 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
       },
       title: {
         display: true,
-        text: 'Data Distribution (Histogram)',
+        text: t('histogram.dataDistribution'),
         font: {
           size: 16,
           weight: 'bold'
@@ -169,9 +171,9 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
         callbacks: {
           title: (context) => {
             const index = context[0].dataIndex;
-            return `Range: ${binRanges?.[index] || context[0].label}`;
+            return t('histogram.range', { range: binRanges?.[index] || context[0].label });
           },
-          label: (context) => `Frequency: ${context.parsed.y}`
+          label: (context) => `${t('histogram.frequency')}: ${context.parsed.y}`
         }
       }
     },
@@ -180,7 +182,7 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
         beginAtZero: true,
         title: {
           display: true,
-          text: 'Frequency'
+          text: t('histogram.frequency')
         },
         ticks: {
           precision: 0
@@ -189,7 +191,7 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
       x: {
         title: {
           display: true,
-          text: 'Value'
+          text: t('histogram.value')
         },
         ticks: {
           maxRotation: 45,
@@ -211,9 +213,9 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
       <Card>
         <CardContent>
           <Typography variant="h6" gutterBottom>
-            Histogram
+            {t('histogram.title')}
           </Typography>
-          <Alert severity="info">No data available for histogram</Alert>
+          <Alert severity="info">{t('histogram.noDataAvailable')}</Alert>
         </CardContent>
       </Card>
     );
@@ -223,12 +225,12 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
     <Card>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          Histogram
+          {t('histogram.title')}
         </Typography>
         
         <Box sx={{ mb: 3 }}>
           <Typography gutterBottom>
-            Number of Bins: {bins}
+            {t('histogram.numberOfBins', { count: bins })}
           </Typography>
           <Slider
             value={bins}
@@ -245,7 +247,7 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
         {showMean && (
           <Box sx={{ mb: 2 }}>
             <Typography variant="body2" color="textSecondary">
-              Mean: {calculateMean(data).toFixed(2)}
+              {t('histogram.mean', { value: calculateMean(data).toFixed(2) })}
             </Typography>
           </Box>
         )}

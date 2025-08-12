@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { copyToClipboard } from '../utils/clipboard';
 import {
   Card,
   CardContent,
@@ -11,12 +13,15 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Divider
+  Divider,
+  Tooltip,
+  IconButton
 } from '@mui/material';
 import {
   ExpandMore,
   ContentCopy,
-  Warning
+  Warning,
+  HelpOutline
 } from '@mui/icons-material';
 import { DescriptiveStatistics } from '../utils/statistics';
 import { useMobileQuery } from '../hooks/useMediaQuery';
@@ -26,6 +31,7 @@ interface StatisticsDisplayProps {
 }
 
 export function StatisticsDisplay({ statistics }: StatisticsDisplayProps) {
+  const { t } = useTranslation();
   const [copySuccess, setCopySuccess] = useState(false);
   const isMobile = useMobileQuery();
 
@@ -34,10 +40,10 @@ export function StatisticsDisplay({ statistics }: StatisticsDisplayProps) {
       <Card data-testid="statistics-container" className="responsive">
         <CardContent>
           <Typography variant="h6" gutterBottom>
-            Statistics
+            {t('statistics.title')}
           </Typography>
           <Typography color="textSecondary">
-            Calculating statistics...
+            {t('statistics.calculating')}
           </Typography>
         </CardContent>
       </Card>
@@ -48,36 +54,61 @@ export function StatisticsDisplay({ statistics }: StatisticsDisplayProps) {
     return value.toFixed(decimals);
   };
 
-  const copyToClipboard = async () => {
+  const handleCopyToClipboard = async () => {
     const statsText = `
-Statistics Summary:
-Mean: ${formatNumber(statistics.mean)}
-Median: ${formatNumber(statistics.median)}
-Standard Deviation: ${formatNumber(statistics.standardDeviation)}
-Coefficient of Variation: ${formatNumber(statistics.coefficientOfVariation)}%
-Minimum: ${formatNumber(statistics.min)}
-Maximum: ${formatNumber(statistics.max)}
-Count: ${statistics.count}
-Q1: ${formatNumber(statistics.quartiles.q1)}
-Q2 (Median): ${formatNumber(statistics.quartiles.q2)}
-Q3: ${formatNumber(statistics.quartiles.q3)}
+${t('export.statisticsSummary')}:
+${t('statistics.mean')}: ${formatNumber(statistics.mean)}
+${t('statistics.median')}: ${formatNumber(statistics.median)}
+${t('statistics.standardDeviation')}: ${formatNumber(statistics.standardDeviation)}
+${t('statistics.coefficientOfVariation')}: ${formatNumber(statistics.coefficientOfVariation)}%
+${t('statistics.minimum')}: ${formatNumber(statistics.min)}
+${t('statistics.maximum')}: ${formatNumber(statistics.max)}
+${t('statistics.count')}: ${statistics.count}
+${t('statistics.q1')}: ${formatNumber(statistics.quartiles.q1)}
+${t('statistics.q2')}: ${formatNumber(statistics.quartiles.q2)}
+${t('statistics.q3')}: ${formatNumber(statistics.quartiles.q3)}
     `.trim();
 
-    try {
-      await navigator.clipboard.writeText(statsText);
+    const success = await copyToClipboard(statsText);
+    if (success) {
       setCopySuccess(true);
-    } catch (err) {
-      console.error('Failed to copy statistics');
     }
   };
 
-  const StatisticCard = ({ title, value, subtitle }: { title: string; value: string | number; subtitle?: string }) => (
+  const TitleWithHelp = ({ title, helpKey }: { title: string; helpKey: string }) => (
+    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
+      <Typography variant="subtitle2" color="textSecondary">
+        {title}
+      </Typography>
+      <Tooltip 
+        title={t(`statistics.help.${helpKey}`)}
+        arrow
+        placement="top"
+        sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+      >
+        <IconButton size="small" sx={{ padding: 0.25, opacity: 0.7 }}>
+          <HelpOutline sx={{ fontSize: 14 }} />
+        </IconButton>
+      </Tooltip>
+    </Box>
+  );
+
+  const StatisticCard = ({ title, value, subtitle, helpKey }: { 
+    title: string; 
+    value: string | number; 
+    subtitle?: string;
+    helpKey?: string;
+  }) => (
     <Card variant="outlined" sx={{ height: '100%' }}>
       <CardContent sx={{ textAlign: 'center', p: { xs: 2, sm: 3 } }}>
-        <Typography variant="subtitle2" color="textSecondary" gutterBottom>
-          {title}
-        </Typography>
-        <Typography variant="h5" component="div" color="primary" fontWeight="bold">
+        {helpKey ? (
+          <TitleWithHelp title={title} helpKey={helpKey} />
+        ) : (
+          <Typography variant="subtitle2" color="textSecondary" gutterBottom>
+            {title}
+          </Typography>
+        )}
+        <Typography variant="h5" component="div" color="primary" fontWeight="bold" sx={{ mt: 1 }}>
           {typeof value === 'number' ? formatNumber(value) : value}
         </Typography>
         {subtitle && (
@@ -97,21 +128,21 @@ Q3: ${formatNumber(statistics.quartiles.q3)}
         <CardContent>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
             <Typography variant="h6">
-              Descriptive Statistics
+              {t('statistics.title')}
             </Typography>
             <Button
               size="small"
               startIcon={<ContentCopy />}
-              onClick={copyToClipboard}
+              onClick={handleCopyToClipboard}
               variant="outlined"
             >
-              Copy
+              {t('statistics.copy')}
             </Button>
           </Box>
 
           {hasOutliers && (
             <Alert severity="warning" sx={{ mb: 2 }} icon={<Warning />}>
-              Outliers detected in the dataset
+              {t('statistics.outliersDetected')}
             </Alert>
           )}
 
@@ -127,25 +158,49 @@ Q3: ${formatNumber(statistics.quartiles.q3)}
               gap: 2
             }}
           >
-            <StatisticCard title="Mean" value={formatNumber(statistics.mean)} />
-            <StatisticCard title="Median" value={formatNumber(statistics.median)} />
             <StatisticCard 
-              title="Standard Deviation" 
+              title={t('statistics.mean')} 
+              value={formatNumber(statistics.mean)} 
+              helpKey="mean"
+            />
+            <StatisticCard 
+              title={t('statistics.median')} 
+              value={formatNumber(statistics.median)} 
+              helpKey="median"
+            />
+            <StatisticCard 
+              title={t('statistics.standardDeviation')} 
               value={formatNumber(statistics.standardDeviation)} 
               subtitle="σ"
+              helpKey="standardDeviation"
             />
             <StatisticCard 
-              title="Coefficient of Variation" 
+              title={t('statistics.coefficientOfVariation')} 
               value={`${formatNumber(statistics.coefficientOfVariation)}%`} 
               subtitle="CV"
+              helpKey="coefficientOfVariation"
             />
-            <StatisticCard title="Minimum" value={formatNumber(statistics.min)} />
-            <StatisticCard title="Maximum" value={formatNumber(statistics.max)} />
-            <StatisticCard title="Count" value={statistics.count} subtitle="n" />
             <StatisticCard 
-              title="Range" 
+              title={t('statistics.minimum')} 
+              value={formatNumber(statistics.min)} 
+              helpKey="minimum"
+            />
+            <StatisticCard 
+              title={t('statistics.maximum')} 
+              value={formatNumber(statistics.max)} 
+              helpKey="maximum"
+            />
+            <StatisticCard 
+              title={t('statistics.count')} 
+              value={statistics.count} 
+              subtitle="n"
+              helpKey="count"
+            />
+            <StatisticCard 
+              title={t('statistics.range')} 
               value={formatNumber(statistics.max - statistics.min)} 
               subtitle="max - min"
+              helpKey="range"
             />
           </Box>
 
@@ -153,7 +208,7 @@ Q3: ${formatNumber(statistics.quartiles.q3)}
 
           <Accordion>
             <AccordionSummary expandIcon={<ExpandMore />}>
-              <Typography variant="subtitle1">Quartiles</Typography>
+              <Typography variant="subtitle1">{t('statistics.quartiles')}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Box 
@@ -164,27 +219,37 @@ Q3: ${formatNumber(statistics.quartiles.q3)}
                 }}
               >
                 <StatisticCard 
-                  title="Q1" 
+                  title={t('statistics.q1')} 
                   value={formatNumber(statistics.quartiles.q1)} 
-                  subtitle="25th percentile"
+                  subtitle={t('statistics.q1Description')}
+                  helpKey="q1"
                 />
                 <StatisticCard 
-                  title="Q2" 
+                  title={t('statistics.q2')} 
                   value={formatNumber(statistics.quartiles.q2)} 
-                  subtitle="50th percentile"
+                  subtitle={t('statistics.q2Description')}
+                  helpKey="q2"
                 />
                 <StatisticCard 
-                  title="Q3" 
+                  title={t('statistics.q3')} 
                   value={formatNumber(statistics.quartiles.q3)} 
-                  subtitle="75th percentile"
+                  subtitle={t('statistics.q3Description')}
+                  helpKey="q3"
                 />
               </Box>
               <Box sx={{ mt: 2, textAlign: 'center' }}>
-                <Chip 
-                  label={`IQR: ${formatNumber(statistics.quartiles.q3 - statistics.quartiles.q1)}`}
-                  variant="outlined"
-                  size="small"
-                />
+                <Tooltip 
+                  title={t('statistics.help.iqr')}
+                  arrow
+                  placement="bottom"
+                >
+                  <Chip 
+                    label={t('statistics.iqr', { value: formatNumber(statistics.quartiles.q3 - statistics.quartiles.q1) })}
+                    variant="outlined"
+                    size="small"
+                    sx={{ cursor: 'help' }}
+                  />
+                </Tooltip>
               </Box>
             </AccordionDetails>
           </Accordion>
@@ -198,7 +263,7 @@ Q3: ${formatNumber(statistics.quartiles.q3)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert severity="success" onClose={() => setCopySuccess(false)}>
-          Statistics copied to clipboard!
+          {t('statistics.copySuccess')}
         </Alert>
       </Snackbar>
     </>

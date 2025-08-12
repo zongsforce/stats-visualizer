@@ -24,9 +24,9 @@ export function validateNumericInput(input: string): ValidationResult {
     return result;
   }
   
-  // Split by various delimiters and clean
+  // Split by various delimiters including full-width commas and semicolons
   const values = input
-    .split(/[,;\s\n\t]+/)
+    .split(/[,，;；\s\n\t]+/)
     .map(val => val.trim())
     .filter(val => val.length > 0);
   
@@ -48,9 +48,9 @@ export function parseNumericInput(input: string): number[] {
     throw new Error(`Invalid input: ${validation.errors.join(', ')}`);
   }
   
-  // Split by various delimiters and parse
+  // Split by various delimiters including full-width commas and semicolons
   return input
-    .split(/[,;\s\n\t]+/)
+    .split(/[,，;；\s\n\t]+/)
     .map(val => val.trim())
     .filter(val => val.length > 0)
     .map(val => parseFloat(val));

@@ -197,7 +197,7 @@ export function DataInput({ onDataChange, onError }: DataInputProps) {
           inputProps={{
             'aria-label': t('dataInput.placeholder'),
             spellCheck: false,
-            inputMode: 'numeric',
+            inputMode: 'text',
             pattern: '[0-9.,\\s\\n\\t-]*',
             ...touchGestures.preventDoubleZoom,
           }}

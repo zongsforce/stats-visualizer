@@ -17,8 +17,6 @@ import {
   Typography,
   Slider,
   Box,
-  FormControlLabel,
-  Switch,
   Alert
 } from '@mui/material';
 import { calculateMean } from '../utils/statistics';

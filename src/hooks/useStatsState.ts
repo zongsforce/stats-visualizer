@@ -1,12 +1,9 @@
 import { useState, useCallback, useEffect } from 'react';
 import { DescriptiveStatistics, calculateDescriptiveStats } from '../utils/statistics';
 import { cleanDataset, DataCleaningOptions } from '../utils/validation';
-import { KernelType } from '../utils/kde';
 
 export interface VisualizationParams {
   bins?: number;
-  bandwidth?: number;
-  kernel?: KernelType;
   removeOutliers?: boolean;
   outlierMethod?: 'iqr' | 'zscore';
 }
@@ -34,7 +31,6 @@ const initialState: StatsState = {
   error: null,
   visualizationParams: {
     bins: 10,
-    bandwidth: 0.5,
     removeOutliers: false,
     outlierMethod: 'iqr'
   }

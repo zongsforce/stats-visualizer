@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Box, Container, useTheme, useMediaQuery } from '@mui/material';
+import { Container, useTheme, useMediaQuery } from '@mui/material';
 import { useMobileQuery } from '../hooks/useMediaQuery';
 
 interface ResponsiveLayoutProps {
@@ -11,7 +11,6 @@ interface ResponsiveLayoutProps {
 export function ResponsiveLayout({ children, className = '', layoutType = 'default' }: ResponsiveLayoutProps) {
   const theme = useTheme();
   const isMobile = useMobileQuery();
-  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   const getLayoutClass = () => {
     const baseClass = 'responsive-layout';

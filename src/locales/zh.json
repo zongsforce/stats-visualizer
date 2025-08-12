@@ -93,28 +93,6 @@
       "bins": "分箱将数据范围分成相等的区间。更多分箱显示更细的详情但可能产生噪音；更少分箱显示总体模式但可能隐藏细节。"
     }
   },
-  "kde": {
-    "title": "核密度估计图",
-    "kernelDensityEstimation": "核密度估计",
-    "bandwidth": "带宽: {{value}}",
-    "kernel": "核函数",
-    "optimal": "最优值: {{value}}",
-    "probabilityDensity": "概率密度",
-    "density": "密度",
-    "densityValue": "密度: {{value}}",
-    "noDataAvailable": "核密度估计图无可用数据",
-    "insufficientData": "核密度计算至少需要2个数据点",
-    "kernels": {
-      "gaussian": "高斯核",
-      "epanechnikov": "Epanechnikov核",
-      "triangular": "三角核"
-    },
-    "help": {
-      "kde": "核密度估计创建一条平滑曲线显示数据的概率密度。与直方图不同，核密度估计提供数据分布的连续估计。",
-      "bandwidth": "带宽控制曲线的平滑度。较小的值显示更多细节但可能有噪音；较大的值创建更平滑的曲线但可能隐藏模式。",
-      "kernel": "核函数决定每个数据点周围曲线的形状。高斯核最常用，Epanechnikov核效率高，三角核具有有限支撑。"
-    }
-  },
   "export": {
     "statisticsSummary": "统计数据摘要"
   },

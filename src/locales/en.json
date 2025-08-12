@@ -93,28 +93,6 @@
       "bins": "Bins divide your data range into equal intervals. More bins show finer detail but may create noise; fewer bins show general patterns but may hide detail."
     }
   },
-  "kde": {
-    "title": "Kernel Density Plot",
-    "kernelDensityEstimation": "Kernel Density Estimation",
-    "bandwidth": "Bandwidth: {{value}}",
-    "kernel": "Kernel",
-    "optimal": "Optimal: {{value}}",
-    "probabilityDensity": "Probability Density",
-    "density": "Density",
-    "densityValue": "Density: {{value}}",
-    "noDataAvailable": "No data available for KDE plot",
-    "insufficientData": "At least 2 data points required for KDE calculation",
-    "kernels": {
-      "gaussian": "Gaussian",
-      "epanechnikov": "Epanechnikov",
-      "triangular": "Triangular"
-    },
-    "help": {
-      "kde": "Kernel Density Estimation creates a smooth curve showing the probability density of your data. Unlike histograms, KDE provides a continuous estimate of data distribution.",
-      "bandwidth": "Bandwidth controls the smoothness of the curve. Smaller values show more detail but may be noisy; larger values create smoother curves but may hide patterns.",
-      "kernel": "The kernel function determines the shape of the curve around each data point. Gaussian is most common, Epanechnikov is efficient, Triangular has finite support."
-    }
-  },
   "export": {
     "statisticsSummary": "Statistics Summary"
   },

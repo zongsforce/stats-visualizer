@@ -72,13 +72,11 @@ describe('useStatsState Hook', () => {
     
     act(() => {
       result.current.setVisualizationParams({
-        bins: 10,
-        bandwidth: 0.8
+        bins: 10
       });
     });
     
     expect(result.current.visualizationParams.bins).toBe(10);
-    expect(result.current.visualizationParams.bandwidth).toBe(0.8);
   });
 
   it('should recalculate statistics when parameters change', () => {

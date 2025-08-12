@@ -195,7 +195,6 @@ function App() {
     data,
     statistics,
     isLoading,
-    error,
     visualizationParams,
     setData,
     setError,

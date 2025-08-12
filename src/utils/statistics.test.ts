@@ -5,6 +5,7 @@ import {
   calculateVariance,
   calculateQuartiles,
   calculateDescriptiveStats,
+  calculateCoefficientOfVariation,
   StatisticsOptions
 } from './statistics';
 
@@ -95,13 +96,33 @@ describe('Statistical Utilities', () => {
     });
   });
 
+  describe('calculateCoefficientOfVariation', () => {
+    it('should calculate coefficient of variation correctly', () => {
+      const cv = calculateCoefficientOfVariation(sampleData);
+      expect(cv).toBeCloseTo(52.2, 1);
+    });
+
+    it('should handle identical values (CV = 0)', () => {
+      const cv = calculateCoefficientOfVariation(identicalValues);
+      expect(cv).toBe(0);
+    });
+
+    it('should throw error when mean is zero', () => {
+      expect(() => calculateCoefficientOfVariation([0, 0, 0])).toThrow('Cannot calculate coefficient of variation when mean is zero');
+    });
+
+    it('should throw error for empty array', () => {
+      expect(() => calculateCoefficientOfVariation(emptyData)).toThrow();
+    });
+  });
+
   describe('calculateDescriptiveStats', () => {
     it('should return complete statistical summary', () => {
       const stats = calculateDescriptiveStats(sampleData);
       expect(stats).toHaveProperty('mean');
       expect(stats).toHaveProperty('median');
       expect(stats).toHaveProperty('standardDeviation');
-      expect(stats).toHaveProperty('variance');
+      expect(stats).toHaveProperty('coefficientOfVariation');
       expect(stats).toHaveProperty('min');
       expect(stats).toHaveProperty('max');
       expect(stats).toHaveProperty('quartiles');

@@ -1,10 +1,12 @@
 import { useState, useCallback, useEffect } from 'react';
 import { DescriptiveStatistics, calculateDescriptiveStats } from '../utils/statistics';
 import { cleanDataset, DataCleaningOptions } from '../utils/validation';
+import { KernelType } from '../utils/kde';
 
 export interface VisualizationParams {
   bins?: number;
   bandwidth?: number;
+  kernel?: KernelType;
   removeOutliers?: boolean;
   outlierMethod?: 'iqr' | 'zscore';
 }

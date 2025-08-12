@@ -74,7 +74,7 @@ export function exportStatisticsAsCSV(statistics: DescriptiveStatistics, options
     ['Mean', statistics.mean.toString()],
     ['Median', statistics.median.toString()],
     ['Standard Deviation', statistics.standardDeviation.toString()],
-    ['Variance', statistics.variance.toString()],
+    ['Coefficient of Variation (%)', statistics.coefficientOfVariation.toString()],
     ['Minimum', statistics.min.toString()],
     ['Maximum', statistics.max.toString()],
     ['Count', statistics.count.toString()],
@@ -121,7 +121,7 @@ export function exportData(data: number[], statistics: DescriptiveStatistics | n
       csvContent += `Mean,${statistics.mean}\n`;
       csvContent += `Median,${statistics.median}\n`;
       csvContent += `Standard Deviation,${statistics.standardDeviation}\n`;
-      csvContent += `Variance,${statistics.variance}\n`;
+      csvContent += `Coefficient of Variation (%),${statistics.coefficientOfVariation}\n`;
       csvContent += `Min,${statistics.min}\n`;
       csvContent += `Max,${statistics.max}\n`;
       csvContent += `Count,${statistics.count}\n`;

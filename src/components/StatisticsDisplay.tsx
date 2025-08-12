@@ -54,7 +54,7 @@ Statistics Summary:
 Mean: ${formatNumber(statistics.mean)}
 Median: ${formatNumber(statistics.median)}
 Standard Deviation: ${formatNumber(statistics.standardDeviation)}
-Variance: ${formatNumber(statistics.variance)}
+Coefficient of Variation: ${formatNumber(statistics.coefficientOfVariation)}%
 Minimum: ${formatNumber(statistics.min)}
 Maximum: ${formatNumber(statistics.max)}
 Count: ${statistics.count}
@@ -135,9 +135,9 @@ Q3: ${formatNumber(statistics.quartiles.q3)}
               subtitle="σ"
             />
             <StatisticCard 
-              title="Variance" 
-              value={formatNumber(statistics.variance)} 
-              subtitle="σ²"
+              title="Coefficient of Variation" 
+              value={`${formatNumber(statistics.coefficientOfVariation)}%`} 
+              subtitle="CV"
             />
             <StatisticCard title="Minimum" value={formatNumber(statistics.min)} />
             <StatisticCard title="Maximum" value={formatNumber(statistics.max)} />

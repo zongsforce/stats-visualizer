@@ -60,7 +60,7 @@ describe('Export Utilities', () => {
     mean: 5.5,
     median: 5.5,
     standardDeviation: 2.872,
-    variance: 8.25,
+    coefficientOfVariation: 52.2,
     min: 1,
     max: 10,
     count: 10,

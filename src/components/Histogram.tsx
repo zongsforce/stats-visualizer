@@ -40,9 +40,9 @@ interface HistogramProps {
 }
 
 export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMean = false }: HistogramProps) {
-  const { chartData, isEmpty } = useMemo(() => {
+  const { chartData, binRanges, isEmpty } = useMemo(() => {
     if (data.length === 0) {
-      return { chartData: null, isEmpty: true };
+      return { chartData: null, binRanges: [], isEmpty: true };
     }
 
     const min = Math.min(...data);
@@ -56,11 +56,21 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
     
     const binCounts = new Array(bins).fill(0);
     const binLabels: string[] = [];
+    const binRanges: string[] = [];
     
     for (let i = 0; i < bins; i++) {
       const leftEdge = binEdges[i];
       const rightEdge = binEdges[i + 1];
-      binLabels.push(`${leftEdge.toFixed(1)}-${rightEdge.toFixed(1)}`);
+      const binCenter = leftEdge + (binWidth / 2);
+      
+      // Store range for tooltips
+      binRanges.push(`${leftEdge.toFixed(1)}-${rightEdge.toFixed(1)}`);
+      
+      // Format center value for display
+      const formattedValue = Math.abs(binCenter - Math.round(binCenter)) < 0.1 
+        ? Math.round(binCenter).toString()
+        : binCenter.toFixed(1);
+      binLabels.push(formattedValue);
     }
     
     data.forEach(value => {
@@ -73,7 +83,7 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
       label: 'Frequency',
       data: binCounts,
       backgroundColor: color,
-      borderColor: color,
+      borderColor: '#2c3e50',
       borderWidth: 1,
       borderRadius: 0
     }];
@@ -85,14 +95,15 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
         labels: binLabels,
         datasets
       },
+      binRanges,
       isEmpty: false
     };
   }, [data, bins, color, showMean]);
 
   const meanValue = showMean ? calculateMean(data) : null;
 
-  // Custom plugin to draw mean line
-  const meanLinePlugin = {
+  // Custom plugin to draw mean line  
+  const meanLinePlugin = useMemo(() => ({
     id: 'meanLine',
     afterDraw: (chart: any) => {
       if (!showMean || !meanValue || data.length === 0) return;
@@ -100,23 +111,30 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
       const ctx = chart.ctx;
       const chartArea = chart.chartArea;
       
-      // Calculate the x position of the mean value
+      // Get data range
       const min = Math.min(...data);
       const max = Math.max(...data);
-      const meanPosition = ((meanValue - min) / (max - min)) * (chartArea.right - chartArea.left) + chartArea.left;
       
-      // Draw the mean line
+      // Calculate mean position as a fraction of the total data range
+      const meanPosition = (meanValue - min) / (max - min);
+      
+      // Map to pixel position within the chart area
+      const chartWidth = chartArea.right - chartArea.left;
+      const meanPixelX = chartArea.left + (meanPosition * chartWidth);
+      
+      // Draw the mean line with subtle styling
       ctx.save();
-      ctx.strokeStyle = '#ff0000';
-      ctx.lineWidth = 3;
-      ctx.setLineDash([8, 4]); // More visible dashed line
+      ctx.strokeStyle = '#d32f2f'; // Deeper red, less glaring
+      ctx.lineWidth = 2; // Thinner line
+      ctx.setLineDash([6, 3]); // Shorter dashes
+      ctx.globalAlpha = 0.8; // Slight transparency
       ctx.beginPath();
-      ctx.moveTo(meanPosition, chartArea.top);
-      ctx.lineTo(meanPosition, chartArea.bottom);
+      ctx.moveTo(meanPixelX, chartArea.top);
+      ctx.lineTo(meanPixelX, chartArea.bottom);
       ctx.stroke();
       ctx.restore();
     }
-  };
+  }), [showMean, meanValue, data]);
 
   const chartOptions: ChartOptions<'bar'> = {
     responsive: true,
@@ -149,7 +167,10 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
         mode: 'index',
         intersect: false,
         callbacks: {
-          title: (context) => `Range: ${context[0].label}`,
+          title: (context) => {
+            const index = context[0].dataIndex;
+            return `Range: ${binRanges?.[index] || context[0].label}`;
+          },
           label: (context) => `Frequency: ${context.parsed.y}`
         }
       }
@@ -168,7 +189,7 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
       x: {
         title: {
           display: true,
-          text: 'Value Range'
+          text: 'Value'
         },
         ticks: {
           maxRotation: 45,

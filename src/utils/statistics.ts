@@ -12,7 +12,7 @@ export interface DescriptiveStatistics {
   mean: number;
   median: number;
   standardDeviation: number;
-  variance: number;
+  coefficientOfVariation: number;
   min: number;
   max: number;
   count: number;
@@ -70,6 +70,21 @@ export function calculateStandardDeviation(data: number[], options: StatisticsOp
   return Math.sqrt(variance);
 }
 
+export function calculateCoefficientOfVariation(data: number[], options: StatisticsOptions = {}): number {
+  if (data.length === 0) {
+    throw new Error('Cannot calculate coefficient of variation of empty dataset');
+  }
+  
+  const mean = calculateMean(data);
+  
+  if (mean === 0) {
+    throw new Error('Cannot calculate coefficient of variation when mean is zero');
+  }
+  
+  const standardDeviation = calculateStandardDeviation(data, options);
+  return (standardDeviation / Math.abs(mean)) * 100;
+}
+
 export function calculateQuartiles(data: number[]): Quartiles {
   if (data.length === 0) {
     throw new Error('Cannot calculate quartiles of empty dataset');
@@ -110,7 +125,7 @@ export function calculateDescriptiveStats(data: number[], options: StatisticsOpt
   const mean = calculateMean(data);
   const median = calculateMedian(data);
   const standardDeviation = calculateStandardDeviation(data, options);
-  const variance = calculateVariance(data, options);
+  const coefficientOfVariation = calculateCoefficientOfVariation(data, options);
   const min = Math.min(...data);
   const max = Math.max(...data);
   const count = data.length;
@@ -120,7 +135,7 @@ export function calculateDescriptiveStats(data: number[], options: StatisticsOpt
     mean,
     median,
     standardDeviation,
-    variance,
+    coefficientOfVariation,
     min,
     max,
     count,

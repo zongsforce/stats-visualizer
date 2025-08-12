@@ -43,6 +43,7 @@ interface KDEPlotProps {
   bandwidth: number;
   onBandwidthChange: (bandwidth: number) => void;
   kernel?: KernelType;
+  onKernelChange?: (kernel: KernelType) => void;
   fill?: boolean;
 }
 
@@ -51,6 +52,7 @@ export function KDEPlot({
   bandwidth, 
   onBandwidthChange, 
   kernel = 'gaussian',
+  onKernelChange,
   fill = false 
 }: KDEPlotProps) {
   const { chartData, isEmpty, optimalBandwidth } = useMemo(() => {
@@ -67,10 +69,9 @@ export function KDEPlot({
     
     return {
       chartData: {
-        labels: x.map(val => val.toFixed(2)),
         datasets: [{
           label: 'Density',
-          data: y,
+          data: x.map((xVal, i) => ({ x: xVal, y: y[i] })),
           borderColor: 'rgb(75, 192, 192)',
           backgroundColor: fill ? 'rgba(75, 192, 192, 0.2)' : 'transparent',
           borderWidth: 2,
@@ -129,6 +130,7 @@ export function KDEPlot({
         }
       },
       x: {
+        type: 'linear',
         title: {
           display: true,
           text: 'Value'
@@ -208,6 +210,7 @@ export function KDEPlot({
             <Select
               value={kernel}
               label="Kernel"
+              onChange={(e) => onKernelChange?.(e.target.value as KernelType)}
             >
               <MenuItem value="gaussian">Gaussian</MenuItem>
               <MenuItem value="epanechnikov">Epanechnikov</MenuItem>

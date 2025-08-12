@@ -7,9 +7,10 @@ import {
   Alert,
   IconButton,
   Paper,
-  Chip
+  Chip,
+  Collapse
 } from '@mui/material';
-import { CloudUpload, Clear } from '@mui/icons-material';
+import { CloudUpload, Clear, ExpandMore, ExpandLess } from '@mui/icons-material';
 import { validateNumericInput, parseNumericInput } from '../utils/validation';
 
 interface DataInputProps {
@@ -21,6 +22,7 @@ export function DataInput({ onDataChange, onError }: DataInputProps) {
   const [inputValue, setInputValue] = useState('');
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [dragActive, setDragActive] = useState(false);
+  const [fileUploadExpanded, setFileUploadExpanded] = useState(false);
 
   const handleInputChange = useCallback((value: string) => {
     setInputValue(value);
@@ -136,39 +138,52 @@ export function DataInput({ onDataChange, onError }: DataInputProps) {
         />
       </Box>
 
-      <Box
-        sx={{
-          border: '2px dashed',
-          borderColor: dragActive ? 'primary.main' : 'grey.300',
-          borderRadius: 1,
-          p: 2,
-          mb: 2,
-          textAlign: 'center',
-          backgroundColor: dragActive ? 'action.hover' : 'background.paper',
-          cursor: 'pointer',
-          transition: 'all 0.2s ease'
-        }}
-        onDragEnter={handleDrag}
-        onDragLeave={handleDrag}
-        onDragOver={handleDrag}
-        onDrop={handleDrop}
-        onClick={() => document.getElementById('file-upload-input')?.click()}
-      >
-        <input
-          id="file-upload-input"
-          type="file"
-          accept=".txt,.csv,.json"
-          onChange={handleFileChange}
-          style={{ display: 'none' }}
-          aria-label="Upload file"
-        />
-        <CloudUpload sx={{ fontSize: 48, color: 'grey.400', mb: 1 }} />
-        <Typography variant="body2" color="textSecondary">
-          Click to upload or drag and drop a file
-        </Typography>
-        <Typography variant="caption" color="textSecondary">
-          Supports .txt, .csv, .json files
-        </Typography>
+      <Box sx={{ mb: 2 }}>
+        <Button
+          variant="text"
+          startIcon={fileUploadExpanded ? <ExpandLess /> : <ExpandMore />}
+          onClick={() => setFileUploadExpanded(!fileUploadExpanded)}
+          size="small"
+          sx={{ mb: 1 }}
+        >
+          File Upload
+        </Button>
+        
+        <Collapse in={fileUploadExpanded}>
+          <Box
+            sx={{
+              border: '2px dashed',
+              borderColor: dragActive ? 'primary.main' : 'grey.300',
+              borderRadius: 1,
+              p: 2,
+              textAlign: 'center',
+              backgroundColor: dragActive ? 'action.hover' : 'background.paper',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+            onClick={() => document.getElementById('file-upload-input')?.click()}
+          >
+            <input
+              id="file-upload-input"
+              type="file"
+              accept=".txt,.csv,.json"
+              onChange={handleFileChange}
+              style={{ display: 'none' }}
+              aria-label="Upload file"
+            />
+            <CloudUpload sx={{ fontSize: 48, color: 'grey.400', mb: 1 }} />
+            <Typography variant="body2" color="textSecondary">
+              Click to upload or drag and drop a file
+            </Typography>
+            <Typography variant="caption" color="textSecondary">
+              Supports .txt, .csv, .json files
+            </Typography>
+          </Box>
+        </Collapse>
       </Box>
 
       <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>

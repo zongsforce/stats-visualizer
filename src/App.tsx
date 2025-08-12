@@ -6,6 +6,7 @@ import { DataInput } from './components/DataInput';
 import { StatisticsDisplay } from './components/StatisticsDisplay';
 import { Histogram } from './components/Histogram';
 import { KDEPlot } from './components/KDEPlot';
+import { KernelType } from './utils/kde';
 import { useStatsState } from './hooks/useStatsState';
 
 const theme = createTheme({
@@ -52,6 +53,10 @@ function App() {
     setVisualizationParams({ bandwidth });
   };
 
+  const handleKernelChange = (kernel: KernelType) => {
+    setVisualizationParams({ kernel });
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -89,6 +94,8 @@ function App() {
                     data={data}
                     bandwidth={visualizationParams.bandwidth || 0.5}
                     onBandwidthChange={handleBandwidthChange}
+                    kernel={visualizationParams.kernel || 'gaussian'}
+                    onKernelChange={handleKernelChange}
                     fill={true}
                   />
                 </Box>

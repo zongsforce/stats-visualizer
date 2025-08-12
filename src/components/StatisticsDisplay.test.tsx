@@ -9,7 +9,7 @@ describe('StatisticsDisplay Component', () => {
     mean: 5.5,
     median: 5.5,
     standardDeviation: 2.872,
-    variance: 8.25,
+    coefficientOfVariation: 52.2,
     min: 1,
     max: 10,
     count: 10,
@@ -26,7 +26,7 @@ describe('StatisticsDisplay Component', () => {
     expect(screen.getByText(/mean/i)).toBeInTheDocument();
     expect(screen.getByText(/median/i)).toBeInTheDocument();
     expect(screen.getByText(/standard deviation/i)).toBeInTheDocument();
-    expect(screen.getByText(/variance/i)).toBeInTheDocument();
+    expect(screen.getByText(/coefficient of variation/i)).toBeInTheDocument();
     expect(screen.getByText(/minimum/i)).toBeInTheDocument();
     expect(screen.getByText(/maximum/i)).toBeInTheDocument();
     expect(screen.getByText(/count/i)).toBeInTheDocument();

@@ -5,8 +5,20 @@ export function calculateKDE(data: number[], bandwidth: number = 0.5, points: nu
     return { x: [], y: [] };
   }
 
-  const min = Math.min(...data);
-  const max = Math.max(...data);
+  // Sort data to calculate robust range using IQR
+  const sortedData = [...data].sort((a, b) => a - b);
+  const n = sortedData.length;
+  const q1 = sortedData[Math.floor(n * 0.25)];
+  const q3 = sortedData[Math.floor(n * 0.75)];
+  const iqr = q3 - q1;
+  
+  // Use IQR to define reasonable bounds, filtering out extreme outliers
+  const lowerBound = q1 - 1.5 * iqr;
+  const upperBound = q3 + 1.5 * iqr;
+  
+  // Use robust bounds but still include some padding for visualization
+  const min = Math.max(Math.min(...data), lowerBound - iqr * 0.5);
+  const max = Math.min(Math.max(...data), upperBound + iqr * 0.5);
   const range = max - min;
   const padding = range * 0.1; // Add 10% padding on each side
   

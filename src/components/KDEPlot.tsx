@@ -74,8 +74,8 @@ export function KDEPlot({
         datasets: [{
           label: t('kde.density'),
           data: x.map((xVal, i) => ({ x: xVal, y: y[i] })),
-          borderColor: 'rgb(75, 192, 192)',
-          backgroundColor: fill ? 'rgba(75, 192, 192, 0.2)' : 'transparent',
+          borderColor: 'rgb(0, 191, 166)', // Secondary color
+          backgroundColor: fill ? 'rgba(0, 191, 166, 0.2)' : 'transparent',
           borderWidth: 2,
           fill: fill,
           tension: 0.4, // Makes the curve smooth

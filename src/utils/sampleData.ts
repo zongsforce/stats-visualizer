@@ -46,12 +46,13 @@ function generateBimodal(count: number): number[] {
 function generateSkewed(count: number): number[] {
   const data: number[] = [];
   for (let i = 0; i < count; i++) {
-    // Use gamma-like distribution
-    let value = 0;
-    for (let j = 0; j < 3; j++) {
-      value += -Math.log(Math.random());
-    }
-    data.push(value * 15000 + 25000); // Scale to income range
+    // Use log-normal distribution for more realistic income data
+    const normalValue = Math.sqrt(-2 * Math.log(Math.random())) * Math.cos(2 * Math.PI * Math.random());
+    const logNormalValue = Math.exp(normalValue * 0.5 + 10.5); // log(μ) ≈ 10.5, σ ≈ 0.5
+    
+    // Cap the maximum value to prevent extreme outliers
+    const cappedValue = Math.min(logNormalValue, 200000);
+    data.push(Math.max(20000, cappedValue)); // Minimum $20k
   }
   return data.map(x => Math.round(x));
 }

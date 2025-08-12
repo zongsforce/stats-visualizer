@@ -87,7 +87,8 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
       backgroundColor: color,
       borderColor: '#2c3e50',
       borderWidth: 1,
-      borderRadius: 0
+      borderRadius: 0,
+      borderSkipped: false
     }];
 
     // Mean will be displayed as a vertical line annotation instead of a bar
@@ -141,6 +142,12 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
   const chartOptions: ChartOptions<'bar'> = {
     responsive: true,
     maintainAspectRatio: false,
+    elements: {
+      bar: {
+        borderRadius: 0,
+        borderSkipped: false
+      }
+    },
     datasets: {
       bar: {
         categoryPercentage: 1.0,

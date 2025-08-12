@@ -64,6 +64,7 @@ export function LanguageSwitch({ variant = 'outlined', size = 'small' }: Languag
             },
             '& .MuiOutlinedInput-notchedOutline': {
               borderColor: 'rgba(255, 255, 255, 0.3)',
+              borderRadius: '4px',
             },
             '&:hover .MuiOutlinedInput-notchedOutline': {
               borderColor: 'rgba(255, 255, 255, 0.5)',
@@ -74,6 +75,28 @@ export function LanguageSwitch({ variant = 'outlined', size = 'small' }: Languag
             '& .MuiSelect-icon': {
               color: 'rgba(255, 255, 255, 0.7)',
             }
+          }}
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                borderRadius: '8px',
+                mt: 1,
+                '& .MuiMenuItem-root': {
+                  borderRadius: '4px',
+                  mx: 1,
+                  my: 0.5,
+                  '&:hover': {
+                    backgroundColor: 'rgba(44, 123, 229, 0.08)',
+                  },
+                  '&.Mui-selected': {
+                    backgroundColor: 'rgba(44, 123, 229, 0.12)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(44, 123, 229, 0.16)',
+                    },
+                  },
+                },
+              },
+            },
           }}
         >
           {languages.map((lang) => (

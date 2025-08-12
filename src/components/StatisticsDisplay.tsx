@@ -214,8 +214,11 @@ ${t('statistics.q3')}: ${formatNumber(statistics.quartiles.q3)}
               <Box 
                 sx={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(3, 1fr)',
-                  gap: 2
+                  gridTemplateColumns: {
+                    xs: '1fr', // 单列布局在移动端
+                    sm: 'repeat(3, 1fr)' // 三列布局在平板及以上
+                  },
+                  gap: { xs: 2, sm: 3 } // 移动端更小间距，桌面端更大间距
                 }}
               >
                 <StatisticCard 

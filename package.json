@@ -1,7 +1,7 @@
 {
   "name": "stats-visualizer",
   "version": "0.1.0",
-  "homepage": "https://zongsforce.github.io/stats-visualizer",
+  "homepage": "",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",

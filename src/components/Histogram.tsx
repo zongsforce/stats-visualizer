@@ -75,23 +75,10 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
       backgroundColor: color,
       borderColor: color,
       borderWidth: 1,
-      borderRadius: 4
+      borderRadius: 0
     }];
 
-    if (showMean) {
-      const meanValue = calculateMean(data);
-      const meanBinIndex = Math.floor((meanValue - min) / binWidth);
-      if (meanBinIndex >= 0 && meanBinIndex < bins) {
-        datasets.push({
-          label: 'Mean',
-          data: binCounts.map((_, index) => index === meanBinIndex ? Math.max(...binCounts) * 1.1 : 0),
-          backgroundColor: 'rgba(255, 99, 132, 0.6)',
-          borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 2,
-          borderRadius: 0
-        });
-      }
-    }
+    // Mean will be displayed as a vertical line annotation instead of a bar
 
     return {
       chartData: {
@@ -102,9 +89,44 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
     };
   }, [data, bins, color, showMean]);
 
+  const meanValue = showMean ? calculateMean(data) : null;
+
+  // Custom plugin to draw mean line
+  const meanLinePlugin = {
+    id: 'meanLine',
+    afterDraw: (chart: any) => {
+      if (!showMean || !meanValue || data.length === 0) return;
+      
+      const ctx = chart.ctx;
+      const chartArea = chart.chartArea;
+      
+      // Calculate the x position of the mean value
+      const min = Math.min(...data);
+      const max = Math.max(...data);
+      const meanPosition = ((meanValue - min) / (max - min)) * (chartArea.right - chartArea.left) + chartArea.left;
+      
+      // Draw the mean line
+      ctx.save();
+      ctx.strokeStyle = '#ff0000';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([8, 4]); // More visible dashed line
+      ctx.beginPath();
+      ctx.moveTo(meanPosition, chartArea.top);
+      ctx.lineTo(meanPosition, chartArea.bottom);
+      ctx.stroke();
+      ctx.restore();
+    }
+  };
+
   const chartOptions: ChartOptions<'bar'> = {
     responsive: true,
     maintainAspectRatio: false,
+    datasets: {
+      bar: {
+        categoryPercentage: 1.0,
+        barPercentage: 1.0
+      }
+    },
     plugins: {
       legend: {
         position: 'top' as const,
@@ -219,6 +241,7 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
               data-testid="histogram-chart"
               data={chartData} 
               options={chartOptions}
+              plugins={[meanLinePlugin]}
               style={{ width: '100%', height: '100%' }}
             />
           )}

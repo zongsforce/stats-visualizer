@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Grid,
   Box,
   Chip,
   Button,
@@ -116,44 +115,39 @@ Q3: ${formatNumber(statistics.quartiles.q3)}
             </Alert>
           )}
 
-          <Grid container spacing={2} className="grid-layout">
-            <Grid item xs={6} sm={4} md={3}>
-              <StatisticCard title="Mean" value={formatNumber(statistics.mean)} />
-            </Grid>
-            <Grid item xs={6} sm={4} md={3}>
-              <StatisticCard title="Median" value={formatNumber(statistics.median)} />
-            </Grid>
-            <Grid item xs={6} sm={4} md={3}>
-              <StatisticCard 
-                title="Standard Deviation" 
-                value={formatNumber(statistics.standardDeviation)} 
-                subtitle="σ"
-              />
-            </Grid>
-            <Grid item xs={6} sm={4} md={3}>
-              <StatisticCard 
-                title="Variance" 
-                value={formatNumber(statistics.variance)} 
-                subtitle="σ²"
-              />
-            </Grid>
-            <Grid item xs={6} sm={4} md={3}>
-              <StatisticCard title="Minimum" value={formatNumber(statistics.min)} />
-            </Grid>
-            <Grid item xs={6} sm={4} md={3}>
-              <StatisticCard title="Maximum" value={formatNumber(statistics.max)} />
-            </Grid>
-            <Grid item xs={6} sm={4} md={3}>
-              <StatisticCard title="Count" value={statistics.count} subtitle="n" />
-            </Grid>
-            <Grid item xs={6} sm={4} md={3}>
-              <StatisticCard 
-                title="Range" 
-                value={formatNumber(statistics.max - statistics.min)} 
-                subtitle="max - min"
-              />
-            </Grid>
-          </Grid>
+          <Box 
+            className="grid-layout"
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: {
+                xs: 'repeat(2, 1fr)',
+                sm: 'repeat(3, 1fr)', 
+                md: 'repeat(4, 1fr)'
+              },
+              gap: 2
+            }}
+          >
+            <StatisticCard title="Mean" value={formatNumber(statistics.mean)} />
+            <StatisticCard title="Median" value={formatNumber(statistics.median)} />
+            <StatisticCard 
+              title="Standard Deviation" 
+              value={formatNumber(statistics.standardDeviation)} 
+              subtitle="σ"
+            />
+            <StatisticCard 
+              title="Variance" 
+              value={formatNumber(statistics.variance)} 
+              subtitle="σ²"
+            />
+            <StatisticCard title="Minimum" value={formatNumber(statistics.min)} />
+            <StatisticCard title="Maximum" value={formatNumber(statistics.max)} />
+            <StatisticCard title="Count" value={statistics.count} subtitle="n" />
+            <StatisticCard 
+              title="Range" 
+              value={formatNumber(statistics.max - statistics.min)} 
+              subtitle="max - min"
+            />
+          </Box>
 
           <Divider sx={{ my: 3 }} />
 
@@ -162,29 +156,29 @@ Q3: ${formatNumber(statistics.quartiles.q3)}
               <Typography variant="subtitle1">Quartiles</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Grid container spacing={2}>
-                <Grid item xs={4}>
-                  <StatisticCard 
-                    title="Q1" 
-                    value={formatNumber(statistics.quartiles.q1)} 
-                    subtitle="25th percentile"
-                  />
-                </Grid>
-                <Grid item xs={4}>
-                  <StatisticCard 
-                    title="Q2" 
-                    value={formatNumber(statistics.quartiles.q2)} 
-                    subtitle="50th percentile"
-                  />
-                </Grid>
-                <Grid item xs={4}>
-                  <StatisticCard 
-                    title="Q3" 
-                    value={formatNumber(statistics.quartiles.q3)} 
-                    subtitle="75th percentile"
-                  />
-                </Grid>
-              </Grid>
+              <Box 
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gap: 2
+                }}
+              >
+                <StatisticCard 
+                  title="Q1" 
+                  value={formatNumber(statistics.quartiles.q1)} 
+                  subtitle="25th percentile"
+                />
+                <StatisticCard 
+                  title="Q2" 
+                  value={formatNumber(statistics.quartiles.q2)} 
+                  subtitle="50th percentile"
+                />
+                <StatisticCard 
+                  title="Q3" 
+                  value={formatNumber(statistics.quartiles.q3)} 
+                  subtitle="75th percentile"
+                />
+              </Box>
               <Box sx={{ mt: 2, textAlign: 'center' }}>
                 <Chip 
                   label={`IQR: ${formatNumber(statistics.quartiles.q3 - statistics.quartiles.q1)}`}

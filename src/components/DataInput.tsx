@@ -52,8 +52,11 @@ export function DataInput({ onDataChange, onError }: DataInputProps) {
   }, [onDataChange, onError]);
 
   const handlePaste = useCallback((event: React.ClipboardEvent) => {
+    event.preventDefault(); // Prevent default paste behavior
     const pastedData = event.clipboardData.getData('text');
     if (pastedData) {
+      // Replace the entire input value with pasted data
+      setInputValue(pastedData);
       handleInputChange(pastedData);
     }
   }, [handleInputChange]);

@@ -62,13 +62,8 @@ export function useStatsState(): StatsState & StatsStateActions {
         return;
       }
 
-      // Clean data based on visualization params
-      const cleaningOptions: DataCleaningOptions = {
-        removeOutliers: state.visualizationParams.removeOutliers,
-        outlierMethod: state.visualizationParams.outlierMethod
-      };
-      
-      const cleanedData = cleanDataset(data, cleaningOptions);
+      // Clean data without using current state
+      const cleanedData = cleanDataset(data);
       const statistics = calculateDescriptiveStats(cleanedData);
 
       setState(prev => ({
@@ -85,7 +80,7 @@ export function useStatsState(): StatsState & StatsStateActions {
         isLoading: false
       }));
     }
-  }, [state.visualizationParams]);
+  }, []);
 
   const setLoading = useCallback((isLoading: boolean) => {
     setState(prev => ({ ...prev, isLoading }));
@@ -106,9 +101,9 @@ export function useStatsState(): StatsState & StatsStateActions {
     setState(initialState);
   }, []);
 
-  // Recalculate statistics when visualization parameters change
+  // Recalculate statistics when visualization parameters change (but not data)
   useEffect(() => {
-    if (state.data.length > 0) {
+    if (state.data.length > 0 && state.visualizationParams.removeOutliers !== undefined) {
       try {
         const cleaningOptions: DataCleaningOptions = {
           removeOutliers: state.visualizationParams.removeOutliers,
@@ -118,7 +113,7 @@ export function useStatsState(): StatsState & StatsStateActions {
         const cleanedData = cleanDataset(state.data, cleaningOptions);
         if (cleanedData.length > 0) {
           const statistics = calculateDescriptiveStats(cleanedData);
-          setState(prev => ({ ...prev, statistics }));
+          setState(prev => ({ ...prev, statistics, data: cleanedData }));
         }
       } catch (error) {
         setState(prev => ({
@@ -127,7 +122,7 @@ export function useStatsState(): StatsState & StatsStateActions {
         }));
       }
     }
-  }, [state.visualizationParams, state.data]);
+  }, [state.visualizationParams.removeOutliers, state.visualizationParams.outlierMethod]);
 
   return {
     ...state,

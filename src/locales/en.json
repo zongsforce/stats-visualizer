@@ -81,7 +81,7 @@
   },
   "histogram": {
     "title": "Histogram",
-    "dataDistribution": "Data Distribution (Histogram)",
+    "dataDistribution": "Data Distribution",
     "numberOfBins": "Number of Bins: {{count}}",
     "frequency": "Frequency",
     "value": "Value",

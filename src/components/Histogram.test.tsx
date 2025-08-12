@@ -3,6 +3,17 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Histogram } from './Histogram';
 
+// Mock react-i18next
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string, options?: any) => {
+      if (key === 'histogram.noDataAvailable') return 'No data available';
+      if (key === 'histogram.mean' && options?.value) return `Mean: ${options.value}`;
+      return key;
+    },
+  }),
+}));
+
 // Mock Chart.js
 jest.mock('react-chartjs-2', () => ({
   Bar: ({ data, options, ...props }: any) => (

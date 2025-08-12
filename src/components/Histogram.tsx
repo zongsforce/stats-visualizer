@@ -40,6 +40,17 @@ interface HistogramProps {
 
 export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMean = false }: HistogramProps) {
   const { t } = useTranslation();
+  
+  const meanValue = useMemo(() => {
+    if (!showMean || data.length === 0) return null;
+    try {
+      return calculateMean(data);
+    } catch (error) {
+      console.warn('Failed to calculate mean:', error);
+      return null;
+    }
+  }, [showMean, data]);
+
   const { chartData, binRanges, isEmpty } = useMemo(() => {
     if (data.length === 0) {
       return { chartData: null, binRanges: [], isEmpty: true };
@@ -89,6 +100,7 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
       borderSkipped: false
     }];
 
+
     // Mean will be displayed as a vertical line annotation instead of a bar
 
     return {
@@ -100,16 +112,6 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
       isEmpty: false
     };
   }, [data, bins, color, t]);
-
-  const meanValue = useMemo(() => {
-    if (!showMean || data.length === 0) return null;
-    try {
-      return calculateMean(data);
-    } catch (error) {
-      console.warn('Failed to calculate mean:', error);
-      return null;
-    }
-  }, [showMean, data]);
 
   // Custom plugin to draw mean line  
   const meanLinePlugin = useMemo(() => ({
@@ -192,7 +194,9 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
       legend: {
         position: 'top' as const,
         labels: {
-          usePointStyle: true,
+          usePointStyle: false,
+          boxWidth: 12,
+          boxHeight: 12,
           font: {
             size: 12
           }
@@ -215,13 +219,8 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
             return t('histogram.range', { range: binRanges?.[index] || context[0].label });
           },
           label: (context) => {
-            const baseLabel = `${t('histogram.frequency')}: ${context.parsed.y}`;
-            // Add mean line info to tooltip when hovering near mean
-            if (showMean && meanValue) {
-              return [baseLabel, t('histogram.mean', { value: meanValue.toFixed(2) })];
-            }
-            return baseLabel;
-          }
+            return `${t('histogram.frequency')}: ${context.parsed.y}`;
+          },
         }
       }
     },
@@ -294,13 +293,13 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
 
         {showMean && meanValue && (
           <Box sx={{ mb: 2 }}>
-            <Typography variant="body2" color="textSecondary" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography variant="body2" color="textSecondary" component="div" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Box 
                 sx={{ 
                   width: 20, 
                   height: 2, 
-                  backgroundColor: '#E85959',
-                  border: '1px dashed #E85959',
+                  backgroundColor: 'transparent',
+                  borderTop: '2px dashed #E85959',
                   opacity: 0.9 
                 }} 
               />

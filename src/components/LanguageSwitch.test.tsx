@@ -27,12 +27,12 @@ describe('LanguageSwitch', () => {
 
   beforeEach(() => {
     mockUseTranslation.mockReturnValue({
-      t: mockT,
+      t: mockT as any,
       i18n: {
         language: 'en',
         changeLanguage: mockChangeLanguage,
       } as any,
-    });
+    } as any);
     jest.clearAllMocks();
   });
 
@@ -52,12 +52,12 @@ describe('LanguageSwitch', () => {
 
   it('should handle Chinese language selection', () => {
     mockUseTranslation.mockReturnValue({
-      t: mockT,
+      t: mockT as any,
       i18n: {
         language: 'zh',
         changeLanguage: mockChangeLanguage,
       } as any,
-    });
+    } as any);
 
     renderWithTheme(<LanguageSwitch />);
     
@@ -109,12 +109,12 @@ describe('LanguageSwitch', () => {
 
   it('should handle Chinese locale variants', () => {
     mockUseTranslation.mockReturnValue({
-      t: mockT,
+      t: mockT as any,
       i18n: {
         language: 'zh-CN',
         changeLanguage: mockChangeLanguage,
       } as any,
-    });
+    } as any);
 
     renderWithTheme(<LanguageSwitch />);
     

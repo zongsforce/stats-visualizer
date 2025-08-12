@@ -7,9 +7,7 @@ import { ResponsiveLayout } from './components/ResponsiveLayout';
 import { DataInput } from './components/DataInput';
 import { StatisticsDisplay } from './components/StatisticsDisplay';
 import { Histogram } from './components/Histogram';
-import { KDEPlot } from './components/KDEPlot';
 import { LanguageSwitch } from './components/LanguageSwitch';
-import { KernelType } from './utils/kde';
 import { useStatsState } from './hooks/useStatsState';
 import './i18n';
 
@@ -212,13 +210,6 @@ function App() {
     setVisualizationParams({ bins });
   };
 
-  const handleBandwidthChange = (bandwidth: number) => {
-    setVisualizationParams({ bandwidth });
-  };
-
-  const handleKernelChange = (kernel: KernelType) => {
-    setVisualizationParams({ kernel });
-  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -322,42 +313,13 @@ function App() {
                       {t('app.sections.visualizations')}
                     </Typography>
                     
-                    <Box sx={{ 
-                      display: 'flex', 
-                      flexDirection: { xs: 'column', lg: 'row' }, 
-                      gap: 4,
-                      alignItems: 'stretch'
-                    }}>
-                      {/* Histogram Panel */}
-                      <Box sx={{ 
-                        flex: 1,
-                        display: 'flex',
-                        flexDirection: 'column'
-                      }}>
-                        <Histogram 
-                          data={data}
-                          bins={visualizationParams.bins || 10}
-                          onBinsChange={handleBinsChange}
-                          showMean={true}
-                        />
-                      </Box>
-                      
-                      {/* KDE Plot Panel */}
-                      <Box sx={{ 
-                        flex: 1,
-                        display: 'flex',
-                        flexDirection: 'column'
-                      }}>
-                        <KDEPlot 
-                          data={data}
-                          bandwidth={visualizationParams.bandwidth || 0.5}
-                          onBandwidthChange={handleBandwidthChange}
-                          kernel={visualizationParams.kernel || 'gaussian'}
-                          onKernelChange={handleKernelChange}
-                          fill={true}
-                        />
-                      </Box>
-                    </Box>
+                    {/* Histogram Panel */}
+                    <Histogram 
+                      data={data}
+                      bins={visualizationParams.bins || 10}
+                      onBinsChange={handleBinsChange}
+                      showMean={true}
+                    />
                   </Box>
                 </Box>
               </Fade>

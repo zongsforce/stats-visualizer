@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <!-- Background -->
+  <rect width="16" height="16" fill="#2C7BE5" rx="2"/>
+  
+  <!-- Simple bar chart -->
+  <rect x="2" y="11" width="2" height="4" fill="white"/>
+  <rect x="5" y="9" width="2" height="6" fill="white"/>
+  <rect x="8" y="7" width="2" height="8" fill="white"/>
+  <rect x="11" y="10" width="2" height="5" fill="white"/>
+</svg>

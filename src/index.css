@@ -1,5 +1,17 @@
-body {
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden;
+  height: 100%;
+}
+
+body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -7,7 +19,51 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+#root {
+  height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* 强制移除MUI组件的默认边距 */
+.MuiAppBar-root {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100vw !important;
+}
+
+.MuiToolbar-root {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+.MuiToolbar-gutters {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.MuiPaper-root.MuiAppBar-root {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+header.MuiAppBar-root {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100vw !important;
+}
+
+/* 移除Container的默认padding，只在AppBar内部 */
+.MuiAppBar-root .MuiContainer-root {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }

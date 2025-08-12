@@ -190,6 +190,29 @@ const theme = createTheme({
         },
       },
     },
+    MuiToolbar: {
+      styleOverrides: {
+        root: {
+          paddingLeft: '0 !important',
+          paddingRight: '0 !important',
+          margin: '0 !important',
+          width: '100%',
+        },
+        gutters: {
+          paddingLeft: '0 !important',
+          paddingRight: '0 !important',
+        },
+      },
+    },
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          margin: '0 !important',
+          padding: '0 !important',
+          width: '100vw !important',
+        },
+      },
+    },
   },
 });
 
@@ -217,47 +240,75 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar 
-        position="static" 
-        elevation={0} 
-        sx={{ 
-          background: 'linear-gradient(135deg, #2C7BE5 0%, #00BFA6 100%)',
-          backdropFilter: 'blur(10px)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-          borderRadius: 0,
-        }}
-      >
-        <Toolbar sx={{ py: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-            <BarChart sx={{ 
-              fontSize: '2rem', 
-              color: '#ffffff',
-              mr: 1.5,
-              filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
-            }} />
-            <Typography 
-              variant="h6" 
-              component="h1" 
-              sx={{ 
-                fontWeight: 700,
-                fontSize: '1.5rem',
-                background: 'linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              {t('app.title')}
-            </Typography>
-          </Box>
-          <LanguageSwitch />
-        </Toolbar>
-      </AppBar>
-      
       <Box sx={{ 
-        background: 'linear-gradient(135deg, #F5F7FA 0%, #f0f4f8 50%, #e5eef5 100%)',
-        minHeight: '100vh',
-        position: 'relative',
+        display: 'flex', 
+        flexDirection: 'column', 
+        height: '100vh',
+        width: '100vw',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        overflow: 'hidden'
+      }}>
+        <AppBar 
+          position="static" 
+          elevation={0} 
+          sx={{ 
+            background: 'linear-gradient(135deg, #2C7BE5 0%, #00BFA6 100%)',
+            backdropFilter: 'blur(10px)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: 0,
+            flexShrink: 0,
+            width: '100vw',
+            maxWidth: '100vw',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            position: 'relative',
+          }}
+        >
+          <Toolbar 
+          disableGutters 
+          sx={{ 
+            py: 1,
+            px: 0,
+            margin: 0,
+            paddingLeft: '0 !important',
+            paddingRight: '0 !important',
+          }}
+        >
+            <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, pl: 2 }}>
+              <BarChart sx={{ 
+                fontSize: '2rem', 
+                color: '#ffffff',
+                mr: 1.5,
+                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
+              }} />
+              <Typography 
+                variant="h6" 
+                component="h1" 
+                sx={{ 
+                  fontWeight: 700,
+                  fontSize: '1.5rem',
+                  background: 'linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                {t('app.title')}
+              </Typography>
+            </Box>
+            <Box sx={{ pr: 2 }}>
+              <LanguageSwitch />
+            </Box>
+          </Toolbar>
+        </AppBar>
+        
+        <Box sx={{ 
+          background: 'linear-gradient(135deg, #F5F7FA 0%, #f0f4f8 50%, #e5eef5 100%)',
+          flex: 1,
+          position: 'relative',
+          overflow: 'auto',
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -330,6 +381,7 @@ function App() {
             )}
           </ResponsiveLayout>
         </Container>
+        </Box>
       </Box>
     </ThemeProvider>
   );

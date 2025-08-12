@@ -38,7 +38,7 @@ jobs:
         run: |
           # Remove package-lock.json to avoid sync issues
           rm -f package-lock.json
-          # Fresh install with legacy peer deps
+          # Fresh install with overrides
           npm install --legacy-peer-deps
         
       - name: Build React app

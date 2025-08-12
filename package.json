@@ -1,7 +1,7 @@
 {
   "name": "stats-visualizer",
   "version": "0.1.0",
-  "homepage": "https://zongsforce.github.io/discrete-computing",
+  "homepage": "https://zongsforce.github.io/stats-visualizer",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -57,5 +57,11 @@
     "@testing-library/user-event": "^14.6.1",
     "eslint-webpack-plugin": "^5.0.2",
     "gh-pages": "^6.1.1"
+  },
+  "resolutions": {
+    "ajv": "6.12.6",
+    "ajv-keywords": "3.5.2",
+    "schema-utils": "2.7.0",
+    "ajv-formats": "1.6.1"
   }
 }

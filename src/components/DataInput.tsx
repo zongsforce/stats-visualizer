@@ -8,12 +8,13 @@ import {
   Alert,
   Paper,
   Chip,
-  Collapse,
   Grid,
   Card,
-  CardContent
+  CardContent,
+  IconButton,
+  Tooltip
 } from '@mui/material';
-import { CloudUpload, Clear, ExpandMore, ExpandLess, PlayArrow } from '@mui/icons-material';
+import { Clear, PlayArrow, AttachFile } from '@mui/icons-material';
 import { validateNumericInput, parseNumericInput } from '../utils/validation';
 import { getAllSampleDatasets, SampleDataset } from '../utils/sampleData';
 import { useMobileOptimized } from '../hooks/useMobileOptimized';
@@ -30,7 +31,6 @@ export function DataInput({ onDataChange, onError }: DataInputProps) {
   const [inputValue, setInputValue] = useState('');
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [dragActive, setDragActive] = useState(false);
-  const [fileUploadExpanded, setFileUploadExpanded] = useState(false);
   const [isDataValid, setIsDataValid] = useState(false);
 
   const handleInputChange = useCallback((value: string) => {
@@ -156,7 +156,7 @@ export function DataInput({ onDataChange, onError }: DataInputProps) {
         {t('dataInput.title')}
       </Typography>
       
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: 2, position: 'relative' }}>
         <TextField
           fullWidth
           multiline
@@ -179,6 +179,7 @@ export function DataInput({ onDataChange, onError }: DataInputProps) {
             '& .MuiOutlinedInput-root': {
               ...mobileStyles.touchInput,
               backgroundColor: 'background.paper',
+              paddingRight: '56px', // Make space for the file upload button
               '&:hover': {
                 backgroundColor: 'action.hover',
               },
@@ -202,75 +203,48 @@ export function DataInput({ onDataChange, onError }: DataInputProps) {
             ...touchGestures.preventDoubleZoom,
           }}
         />
-      </Box>
-
-      {!inputValue && (
-        <Box sx={{ mb: 2 }}>
-          <Button
-            variant="text"
-            startIcon={fileUploadExpanded ? <ExpandLess /> : <ExpandMore />}
-            onClick={() => setFileUploadExpanded(!fileUploadExpanded)}
-            size="small"
-            sx={{ 
-              mb: 1,
-              color: 'text.secondary',
-              '&:hover': {
-                backgroundColor: 'action.hover'
-              }
-            }}
-          >
-            {t('dataInput.fileUpload')}
-          </Button>
-          
-          <Collapse in={fileUploadExpanded}>
-            <Box
-              sx={{
-                border: '2px dashed',
-                borderColor: dragActive ? 'primary.main' : 'grey.300',
-                borderRadius: 1,
-                p: 3,
-                textAlign: 'center',
-                backgroundColor: dragActive ? 'primary.light' : 'grey.50',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                '&:hover': {
-                  borderColor: 'primary.main',
-                  backgroundColor: 'primary.light'
-                }
-              }}
-              onDragEnter={handleDrag}
-              onDragLeave={handleDrag}
-              onDragOver={handleDrag}
-              onDrop={handleDrop}
+        
+        {/* File Upload Icon Button */}
+        {!inputValue && (
+          <Tooltip title={t('dataInput.fileUpload')} placement="top">
+            <IconButton
               onClick={() => document.getElementById('file-upload-input')?.click()}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  document.getElementById('file-upload-input')?.click();
-                }
+              sx={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                color: 'action.active',
+                backgroundColor: 'background.paper',
+                border: '1px solid',
+                borderColor: 'divider',
+                width: 40,
+                height: 40,
+                ...mobileStyles.touchButton,
+                '&:hover': {
+                  backgroundColor: 'primary.light',
+                  color: 'primary.main',
+                  borderColor: 'primary.main',
+                  transform: 'scale(1.05)',
+                },
+                transition: 'all 0.2s ease',
+                ...touchGestures.preventDoubleZoom,
               }}
             >
-              <input
-                id="file-upload-input"
-                type="file"
-                accept=".txt,.csv,.json"
-                onChange={handleFileChange}
-                style={{ display: 'none' }}
-                aria-label={t('dataInput.fileUploadDescription')}
-              />
-              <CloudUpload sx={{ fontSize: 40, color: 'primary.main', mb: 1 }} />
-              <Typography variant="body2" color="textPrimary" sx={{ mb: 0.5 }}>
-                {t('dataInput.fileUploadDescription')}
-              </Typography>
-              <Typography variant="caption" color="textSecondary">
-                {t('dataInput.fileUploadSupports')}
-              </Typography>
-            </Box>
-          </Collapse>
-        </Box>
-      )}
+              <AttachFile fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        )}
+        
+        <input
+          id="file-upload-input"
+          type="file"
+          accept=".txt,.csv,.json"
+          onChange={handleFileChange}
+          style={{ display: 'none' }}
+          aria-label={t('dataInput.fileUploadDescription')}
+        />
+      </Box>
+
 
       <Box sx={{ 
         display: 'flex', 
@@ -289,14 +263,16 @@ export function DataInput({ onDataChange, onError }: DataInputProps) {
                 announce(t('dataInput.clear'));
               }}
               startIcon={<Clear />}
-              size={capabilities.isTouch ? 'medium' : 'small'}
+              size="small"
               color={isDataValid ? 'primary' : 'secondary'}
               sx={{
-                ...mobileStyles.touchButton,
-                ...(capabilities.isTouch && {
-                  fontSize: '14px',
-                  padding: '10px 16px',
-                }),
+                fontSize: '13px',
+                padding: '4px 10px',
+                minHeight: 'auto',
+                minWidth: 'auto',
+                '& .MuiButton-startIcon': {
+                  marginRight: 0.5,
+                },
                 ...touchGestures.preventDoubleZoom,
               }}
             >
@@ -310,7 +286,7 @@ export function DataInput({ onDataChange, onError }: DataInputProps) {
 
       {!inputValue && (
         <Box sx={{ 
-          mt: 3, 
+          mt: { xs: 0.5, sm: 1 }, 
           p: { xs: 2, sm: 3 }, 
           background: 'linear-gradient(135deg, rgba(44, 123, 229, 0.08) 0%, rgba(0, 191, 166, 0.08) 100%)',
           borderRadius: 3,

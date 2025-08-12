@@ -103,10 +103,14 @@ const theme = createTheme({
   components: {
     MuiContainer: {
       styleOverrides: {
-        root: {
-          paddingTop: '2rem',
-          paddingBottom: '2rem',
-        },
+        root: ({ theme }) => ({
+          paddingTop: '1rem',
+          paddingBottom: '1rem',
+          [theme.breakpoints.up('sm')]: {
+            paddingTop: '2rem',
+            paddingBottom: '2rem',
+          },
+        }),
       },
     },
     MuiPaper: {
@@ -268,7 +272,7 @@ function App() {
         <Container maxWidth="xl" sx={{ position: 'relative', zIndex: 1 }}>
           <ResponsiveLayout>
             {/* Data Input Section */}
-            <Box component="section" sx={{ mb: 4 }}>
+            <Box component="section" sx={{ mb: { xs: 2, sm: 4 } }}>
               <DataInput 
                 onDataChange={handleDataChange}
                 onError={setError}
@@ -291,7 +295,7 @@ function App() {
               <Fade in={!!statistics} timeout={600}>
                 <Box>
                   {/* Section Header */}
-                  <Box sx={{ mb: 3 }}>
+                  <Box sx={{ mb: { xs: 1.5, sm: 3 } }}>
                     <Typography variant="h4" color="text.primary" sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
                       {t('app.sections.analysisResults')}
                     </Typography>
@@ -301,15 +305,15 @@ function App() {
                   </Box>
                   
                   {/* Statistics Overview */}
-                  <Box component="section" sx={{ mb: 4 }}>
+                  <Box component="section" sx={{ mb: { xs: 2.5, sm: 4 } }}>
                     <StatisticsDisplay statistics={statistics} />
                   </Box>
                   
-                  <Divider sx={{ my: 4 }} />
+                  <Divider sx={{ my: { xs: 2.5, sm: 4 } }} />
                   
                   {/* Visualizations Section */}
                   <Box component="section">
-                    <Typography variant="h5" color="text.primary" sx={{ mb: 3, textAlign: { xs: 'center', sm: 'left' } }}>
+                    <Typography variant="h5" color="text.primary" sx={{ mb: { xs: 2, sm: 3 }, textAlign: { xs: 'center', sm: 'left' } }}>
                       {t('app.sections.visualizations')}
                     </Typography>
                     

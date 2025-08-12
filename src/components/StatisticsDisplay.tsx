@@ -132,9 +132,17 @@ ${t('statistics.q3')}: ${formatNumber(statistics.quartiles.q3)}
             </Typography>
             <Button
               size="small"
-              startIcon={<ContentCopy />}
+              startIcon={<ContentCopy fontSize="small" />}
               onClick={handleCopyToClipboard}
               variant="outlined"
+              sx={{
+                fontSize: '13px',
+                padding: '4px 10px',
+                minHeight: 'auto',
+                '& .MuiButton-startIcon': {
+                  marginRight: 0.5,
+                },
+              }}
             >
               {t('statistics.copy')}
             </Button>

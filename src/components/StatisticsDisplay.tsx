@@ -100,22 +100,38 @@ ${t('statistics.q3')}: ${formatNumber(statistics.quartiles.q3)}
     helpKey?: string;
   }) => (
     <Card variant="outlined" sx={{ height: '100%' }}>
-      <CardContent sx={{ textAlign: 'center', p: { xs: 2, sm: 3 } }}>
+      <CardContent sx={{ 
+        textAlign: 'center', 
+        p: { xs: '16px 16px', sm: 3 },
+        '&:last-child': { pb: { xs: '16px', sm: 3 } }
+      }}>
         {helpKey ? (
           <TitleWithHelp title={title} helpKey={helpKey} />
         ) : (
-          <Typography variant="subtitle2" color="textSecondary" gutterBottom>
+          <Typography variant="subtitle2" color="textSecondary" sx={{ 
+            fontSize: { xs: '0.75rem', sm: '0.875rem' },
+            mb: { xs: 0.75, sm: 1 },
+            lineHeight: { xs: 1.2, sm: 1.5 }
+          }}>
             {title}
           </Typography>
         )}
-        <Typography variant="h5" component="div" color="primary" fontWeight="bold" sx={{ mt: 1 }}>
+        <Typography variant="h5" component="div" color="primary" fontWeight="bold" sx={{ 
+          mt: { xs: 0, sm: 1 },
+          mb: { xs: 0.5, sm: 1 },
+          fontSize: { xs: '1.1rem', sm: '1.5rem' },
+          lineHeight: { xs: 1.2, sm: 1.4 }
+        }}>
           {typeof value === 'number' ? formatNumber(value) : value}
         </Typography>
-        {subtitle && (
-          <Typography variant="caption" color="textSecondary">
-            {subtitle}
-          </Typography>
-        )}
+        <Typography variant="caption" color="textSecondary" sx={{
+          fontSize: { xs: '0.7rem', sm: '0.75rem' },
+          lineHeight: { xs: 1.2, sm: 1.4 },
+          minHeight: { xs: '0.7rem', sm: '1rem' },
+          display: 'block'
+        }}>
+          {subtitle || '\u00A0'}
+        </Typography>
       </CardContent>
     </Card>
   );
@@ -135,13 +151,21 @@ ${t('statistics.q3')}: ${formatNumber(statistics.quartiles.q3)}
               startIcon={<ContentCopy fontSize="small" />}
               onClick={handleCopyToClipboard}
               variant="outlined"
+              color="primary"
               sx={{
                 fontSize: '13px',
                 padding: '4px 10px',
                 minHeight: 'auto',
+                minWidth: 'auto',
                 '& .MuiButton-startIcon': {
                   marginRight: 0.5,
                 },
+                '&:hover': {
+                  backgroundColor: 'primary.main',
+                  borderColor: 'primary.main',
+                  color: 'primary.contrastText',
+                },
+                transition: 'all 0.2s ease',
               }}
             >
               {t('statistics.copy')}
@@ -163,7 +187,7 @@ ${t('statistics.q3')}: ${formatNumber(statistics.quartiles.q3)}
                 sm: 'repeat(3, 1fr)', 
                 md: 'repeat(4, 1fr)'
               },
-              gap: 2
+              gap: { xs: 1.5, sm: 2 }
             }}
           >
             <StatisticCard 

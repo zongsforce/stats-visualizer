@@ -179,7 +179,7 @@ export function DataInput({ onDataChange, onError }: DataInputProps) {
             '& .MuiOutlinedInput-root': {
               ...mobileStyles.touchInput,
               backgroundColor: 'background.paper',
-              paddingRight: '56px', // Make space for the file upload button
+              paddingRight: inputValue ? '16px' : '56px', // Dynamic padding based on content
               '&:hover': {
                 backgroundColor: 'action.hover',
               },
@@ -264,7 +264,7 @@ export function DataInput({ onDataChange, onError }: DataInputProps) {
               }}
               startIcon={<Clear />}
               size="small"
-              color={isDataValid ? 'primary' : 'secondary'}
+              color="primary"
               sx={{
                 fontSize: '13px',
                 padding: '4px 10px',
@@ -273,6 +273,13 @@ export function DataInput({ onDataChange, onError }: DataInputProps) {
                 '& .MuiButton-startIcon': {
                   marginRight: 0.5,
                 },
+                '&:hover': {
+                  backgroundColor: '#E85959',
+                  borderColor: '#E85959',
+                  color: 'white',
+                  opacity: 0.9,
+                },
+                transition: 'all 0.2s ease',
                 ...touchGestures.preventDoubleZoom,
               }}
             >

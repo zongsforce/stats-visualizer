@@ -243,12 +243,8 @@ function App() {
       <Box sx={{ 
         display: 'flex', 
         flexDirection: 'column', 
-        height: '100vh',
+        minHeight: '100vh',
         width: '100vw',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        overflow: 'hidden'
       }}>
         <AppBar 
           position="static" 
@@ -261,9 +257,6 @@ function App() {
             flexShrink: 0,
             width: '100vw',
             maxWidth: '100vw',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            position: 'relative',
           }}
         >
           <Toolbar 
@@ -308,7 +301,6 @@ function App() {
           background: 'linear-gradient(135deg, #F5F7FA 0%, #f0f4f8 50%, #e5eef5 100%)',
           flex: 1,
           position: 'relative',
-          overflow: 'auto',
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -341,12 +333,13 @@ function App() {
               </Fade>
             )}
             
+            
             {/* Analysis Results Section */}
             {data.length > 0 && statistics && (
               <Fade in={!!statistics} timeout={600}>
                 <Box>
                   {/* Section Header */}
-                  <Box sx={{ mb: { xs: 1.5, sm: 3 } }}>
+                  <Box sx={{ mt: { xs: 3, sm: 5 }, mb: { xs: 1.5, sm: 3 } }}>
                     <Typography variant="h4" color="text.primary" sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
                       {t('app.sections.analysisResults')}
                     </Typography>
@@ -359,8 +352,6 @@ function App() {
                   <Box component="section" sx={{ mb: { xs: 2.5, sm: 4 } }}>
                     <StatisticsDisplay statistics={statistics} />
                   </Box>
-                  
-                  <Divider sx={{ my: { xs: 2.5, sm: 4 } }} />
                   
                   {/* Visualizations Section */}
                   <Box component="section">

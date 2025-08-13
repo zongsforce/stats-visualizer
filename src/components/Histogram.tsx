@@ -203,12 +203,7 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
         }
       },
       title: {
-        display: true,
-        text: t('histogram.dataDistribution'),
-        font: {
-          size: 16,
-          weight: 'bold'
-        }
+        display: false
       },
       tooltip: {
         mode: 'index',
@@ -271,9 +266,25 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
   return (
     <Card>
       <CardContent>
-        <Typography variant="h6" gutterBottom>
-          {t('histogram.title')}
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+          <Typography variant="h6">
+            {t('histogram.title')}
+          </Typography>
+          {showMean && meanValue && (
+            <Typography variant="body2" color="textSecondary" component="div" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box 
+                sx={{ 
+                  width: 20, 
+                  height: 2, 
+                  backgroundColor: 'transparent',
+                  borderTop: '2px dashed #E85959',
+                  opacity: 0.9 
+                }} 
+              />
+              {t('histogram.mean', { value: meanValue.toFixed(2) })}
+            </Typography>
+          )}
+        </Box>
         
         <Box sx={{ mb: 3 }}>
           <Typography gutterBottom>
@@ -291,22 +302,6 @@ export function Histogram({ data, bins, onBinsChange, color = '#3f51b5', showMea
           />
         </Box>
 
-        {showMean && meanValue && (
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="body2" color="textSecondary" component="div" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Box 
-                sx={{ 
-                  width: 20, 
-                  height: 2, 
-                  backgroundColor: 'transparent',
-                  borderTop: '2px dashed #E85959',
-                  opacity: 0.9 
-                }} 
-              />
-              {t('histogram.mean', { value: meanValue.toFixed(2) })}
-            </Typography>
-          </Box>
-        )}
 
         <Box 
           sx={{ 

@@ -75,35 +75,52 @@ ${t('statistics.q3')}: ${formatNumber(statistics.quartiles.q3)}
     }
   };
 
-  const TitleWithHelp = ({ title, helpKey }: { title: string; helpKey: string }) => (
-    <Tooltip 
-      title={t(`statistics.help.${helpKey}`)}
-      arrow
-      placement="top"
-      sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
-    >
-      <Typography variant="subtitle2" color="textSecondary" sx={{
-        fontSize: { xs: '0.9rem', sm: '0.875rem' },
-        lineHeight: { xs: 1.2, sm: 1.5 },
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        cursor: 'pointer',
-        display: 'inline-block',
-        textAlign: 'center',
-        borderBottom: '1px dashed currentColor',
-        borderBottomColor: 'currentColor',
-        opacity: 0.8,
-        '&:hover': {
-          borderBottomStyle: 'solid',
-          opacity: 1,
-        },
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-      }}>
-        {title}
-      </Typography>
-    </Tooltip>
-  );
+  const TitleWithHelp = ({ title, helpKey }: { title: string; helpKey: string }) => {
+    // 获取翻译文本，如果失败则使用回退文本
+    const getTooltipText = () => {
+      try {
+        const translatedText = t(`statistics.help.${helpKey}`);
+        // 检查是否返回了翻译键本身（表示翻译失败）
+        if (translatedText === `statistics.help.${helpKey}`) {
+          return title; // 使用标题作为回退
+        }
+        return translatedText;
+      } catch (error) {
+        console.warn(`Translation failed for statistics.help.${helpKey}:`, error);
+        return title; // 使用标题作为回退
+      }
+    };
+
+    return (
+      <Tooltip 
+        title={getTooltipText()}
+        arrow
+        placement="top"
+        sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+      >
+        <Typography variant="subtitle2" color="textSecondary" sx={{
+          fontSize: { xs: '0.9rem', sm: '0.875rem' },
+          lineHeight: { xs: 1.2, sm: 1.5 },
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          cursor: 'pointer',
+          display: 'inline-block',
+          textAlign: 'center',
+          borderBottom: '1px dashed currentColor',
+          borderBottomColor: 'currentColor',
+          opacity: 0.8,
+          '&:hover': {
+            borderBottomStyle: 'solid',
+            opacity: 1,
+          },
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+        }}>
+          {title}
+        </Typography>
+      </Tooltip>
+    );
+  };
 
   const StatisticCard = ({ title, value, subtitle, helpKey }: { 
     title: string; 

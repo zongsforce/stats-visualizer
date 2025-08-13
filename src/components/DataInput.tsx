@@ -148,11 +148,12 @@ export function DataInput({ onDataChange, onError, value = '', onInputChange }: 
 
   const handleClear = useCallback(() => {
     setInputValue('');
+    onInputChange?.('');
     setValidationErrors([]);
     setIsDataValid(false);
     onDataChange([]);
     onError(null);
-  }, [onDataChange, onError]);
+  }, [onDataChange, onError, onInputChange]);
 
   const handleLoadSampleData = useCallback((dataset: SampleDataset) => {
     const dataString = dataset.data.join(', ');

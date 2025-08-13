@@ -96,22 +96,25 @@ ${t('statistics.q3')}: ${formatNumber(statistics.quartiles.q3)}
         title={getTooltipText()}
         arrow
         placement="top"
+        enterTouchDelay={0}
+        leaveTouchDelay={3000}
         sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
       >
         <Typography variant="subtitle2" color="textSecondary" sx={{
           fontSize: { xs: '0.9rem', sm: '0.875rem' },
           lineHeight: { xs: 1.2, sm: 1.5 },
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
+          whiteSpace: 'normal',
+          overflow: 'visible',
           cursor: 'pointer',
           display: 'inline-block',
           textAlign: 'center',
-          borderBottom: '1px dashed currentColor',
-          borderBottomColor: 'currentColor',
+          textDecoration: 'underline',
+          textDecorationStyle: 'dashed',
+          textDecorationColor: 'currentColor',
+          textUnderlineOffset: '2px',
           opacity: 0.8,
           '&:hover': {
-            borderBottomStyle: 'solid',
+            textDecorationStyle: 'solid',
             opacity: 1,
           },
           transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
@@ -145,9 +148,9 @@ ${t('statistics.q3')}: ${formatNumber(statistics.quartiles.q3)}
             fontSize: { xs: '0.9rem', sm: '0.875rem' },
             mb: { xs: 0.75, sm: 1 },
             lineHeight: { xs: 1.2, sm: 1.5 },
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
+            whiteSpace: 'normal',
+            overflow: 'visible',
+            textAlign: 'center'
           }}>
             {title}
           </Typography>

@@ -23,18 +23,32 @@ import { mobileStyles, touchGestures } from '../utils/mobileOptimizations';
 interface DataInputProps {
   onDataChange: (data: number[]) => void;
   onError: (error: string | null) => void;
+  value?: string;
+  onInputChange?: (value: string) => void;
 }
 
-export function DataInput({ onDataChange, onError }: DataInputProps) {
+export function DataInput({ onDataChange, onError, value = '', onInputChange }: DataInputProps) {
   const { t } = useTranslation();
   const { capabilities, feedback, announce } = useMobileOptimized();
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(value);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [dragActive, setDragActive] = useState(false);
   const [isDataValid, setIsDataValid] = useState(false);
 
+  // Sync with external value prop
+  React.useEffect(() => {
+    if (value !== inputValue) {
+      setInputValue(value);
+      if (!value.trim()) {
+        setValidationErrors([]);
+        setIsDataValid(false);
+      }
+    }
+  }, [value, inputValue]);
+
   const handleInputChange = useCallback((value: string) => {
     setInputValue(value);
+    onInputChange?.(value);
     
     if (!value.trim()) {
       setValidationErrors([]);

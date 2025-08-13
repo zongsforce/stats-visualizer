@@ -227,6 +227,8 @@ function App() {
     setError,
     setVisualizationParams
   } = useStatsState();
+  
+  const [inputValue, setInputValue] = React.useState('');
 
   const handleDataChange = (newData: number[]) => {
     setData(newData);
@@ -269,7 +271,27 @@ function App() {
             paddingRight: '0 !important',
           }}
         >
-            <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, pl: 2, minWidth: 0 }}>
+            <Box 
+              sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                flex: 1, 
+                pl: 2, 
+                minWidth: 0,
+                cursor: 'pointer',
+                '&:hover': {
+                  opacity: 0.8
+                },
+                transition: 'opacity 0.2s ease'
+              }}
+              onClick={() => {
+                setInputValue('');
+                setData([]);
+                setError(null);
+                setVisualizationParams({ bins: 10 });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            >
               <BarChart sx={{ 
                 fontSize: '2rem', 
                 color: '#ffffff',
@@ -321,6 +343,8 @@ function App() {
             {/* Data Input Section */}
             <Box component="section" sx={{ mb: { xs: 2, sm: 4 } }}>
               <DataInput 
+                value={inputValue}
+                onInputChange={setInputValue}
                 onDataChange={handleDataChange}
                 onError={setError}
               />

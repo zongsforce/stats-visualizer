@@ -76,21 +76,33 @@ ${t('statistics.q3')}: ${formatNumber(statistics.quartiles.q3)}
   };
 
   const TitleWithHelp = ({ title, helpKey }: { title: string; helpKey: string }) => (
-    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
-      <Typography variant="subtitle2" color="textSecondary">
+    <Tooltip 
+      title={t(`statistics.help.${helpKey}`)}
+      arrow
+      placement="top"
+      sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+    >
+      <Typography variant="subtitle2" color="textSecondary" sx={{
+        fontSize: { xs: '0.9rem', sm: '0.875rem' },
+        lineHeight: { xs: 1.2, sm: 1.5 },
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        cursor: 'pointer',
+        display: 'inline-block',
+        textAlign: 'center',
+        borderBottom: '1px dashed currentColor',
+        borderBottomColor: 'currentColor',
+        opacity: 0.8,
+        '&:hover': {
+          borderBottomStyle: 'solid',
+          opacity: 1,
+        },
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+      }}>
         {title}
       </Typography>
-      <Tooltip 
-        title={t(`statistics.help.${helpKey}`)}
-        arrow
-        placement="top"
-        sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
-      >
-        <IconButton size="small" sx={{ padding: 0.25, opacity: 0.7 }}>
-          <HelpOutline sx={{ fontSize: 14 }} />
-        </IconButton>
-      </Tooltip>
-    </Box>
+    </Tooltip>
   );
 
   const StatisticCard = ({ title, value, subtitle, helpKey }: { 
@@ -103,21 +115,28 @@ ${t('statistics.q3')}: ${formatNumber(statistics.quartiles.q3)}
       <CardContent sx={{ 
         textAlign: 'center', 
         p: { xs: '16px 16px', sm: 3 },
-        '&:last-child': { pb: { xs: '16px', sm: 3 } }
+        '&:last-child': { pb: { xs: '16px', sm: 3 } },
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}>
         {helpKey ? (
           <TitleWithHelp title={title} helpKey={helpKey} />
         ) : (
           <Typography variant="subtitle2" color="textSecondary" sx={{ 
-            fontSize: { xs: '0.75rem', sm: '0.875rem' },
+            fontSize: { xs: '0.9rem', sm: '0.875rem' },
             mb: { xs: 0.75, sm: 1 },
-            lineHeight: { xs: 1.2, sm: 1.5 }
+            lineHeight: { xs: 1.2, sm: 1.5 },
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
           }}>
             {title}
           </Typography>
         )}
         <Typography variant="h5" component="div" color="primary" fontWeight="bold" sx={{ 
-          mt: { xs: 0, sm: 1 },
+          mt: { xs: 1, sm: 1 },
           mb: { xs: 0.5, sm: 1 },
           fontSize: { xs: '1.1rem', sm: '1.5rem' },
           lineHeight: { xs: 1.2, sm: 1.4 }

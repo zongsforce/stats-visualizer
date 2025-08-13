@@ -269,7 +269,7 @@ function App() {
             paddingRight: '0 !important',
           }}
         >
-            <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, pl: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, pl: 2, minWidth: 0 }}>
               <BarChart sx={{ 
                 fontSize: '2rem', 
                 color: '#ffffff',
@@ -281,17 +281,21 @@ function App() {
                 component="h1" 
                 sx={{ 
                   fontWeight: 700,
-                  fontSize: '1.5rem',
+                  fontSize: { xs: '1.1rem', sm: '1.5rem' },
                   background: 'linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  maxWidth: '100%'
                 }}
               >
                 {t('app.title')}
               </Typography>
             </Box>
-            <Box sx={{ pr: 2 }}>
+            <Box sx={{ pr: 2, flexShrink: 0 }}>
               <LanguageSwitch />
             </Box>
           </Toolbar>
